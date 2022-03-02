@@ -17,17 +17,45 @@ class PerGUI(Ui_MainWindow, QMainWindow):
         self.setupUi(self)
         # 打开文件的内容
         self.data = None
+        # 另存为文件的内容
+        self.result = None
+        # 打开文件的绝对路径
+        self.Apath = None
+
+    # 新建
+    def new(self):
+        self.textEdit.setText('')
+        self.textEdit_2.setText('')
+        self.textEdit_3.setText('')
 
     # 打开文件
     def openFile(self):
         fname = QFileDialog.getOpenFileName(self, "open file", '.')
+        self.Apath = fname[0]  # 记录绝对路径，后面保存要用
         if fname[0]:
-            f = open(fname[0], 'r', encoding='utf-8')
+            f = open(self.Apath, 'r', encoding='utf-8')
             with f:
                 self.data = f.read()
                 self.textEdit_3.setText(self.data)
                 self.textEdit_2.setText('')
                 self.textEdit.setText('')
+
+    # 保存
+    def save(self):
+        if self.Apath is not None:
+            self.result = self.textEdit_3.toPlainText()
+            self.data = self.result
+            with open(self.Apath, 'w', encoding='utf-8') as f:
+                f.write(self.result)
+        else:
+            self.S()
+
+    # 另存为
+    def S(self):
+        self.result = self.textEdit_3.toPlainText()
+        filename = QFileDialog.getSaveFileName(self, 'save file')
+        with open(filename[0], 'w', encoding='utf-8') as f:
+            f.write(self.result)
 
     # 词法分析
     def W(self):

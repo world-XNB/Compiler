@@ -66,8 +66,8 @@ class Ui_MainWindow(object):
         self.actionopen.setObjectName("actionopen")
         self.actionsave = QtWidgets.QAction(MainWindow)
         self.actionsave.setObjectName("actionsave")
-        self.actionsaveas = QtWidgets.QAction(MainWindow)
-        self.actionsaveas.setObjectName("actionsaveas")
+        self.actionsaves = QtWidgets.QAction(MainWindow)
+        self.actionsaves.setObjectName("actionsaves")
         self.actionquit = QtWidgets.QAction(MainWindow)
         self.actionquit.setObjectName("actionquit")
         self.actionW = QtWidgets.QAction(MainWindow)
@@ -81,7 +81,7 @@ class Ui_MainWindow(object):
         self.menu.addAction(self.actionnew)
         self.menu.addAction(self.actionopen)
         self.menu.addAction(self.actionsave)
-        self.menu.addAction(self.actionsaveas)
+        self.menu.addAction(self.actionsaves)
         self.menu.addAction(self.actionquit)
         self.menu_3.addAction(self.actionW)
         self.menu_4.addAction(self.actionP)
@@ -107,6 +107,9 @@ class Ui_MainWindow(object):
         self.actionP.triggered.connect(MainWindow.P)  # type: ignore
         self.actionhelp.triggered.connect(MainWindow.H)  # type: ignore
         self.actionabout.triggered.connect(MainWindow.A)  # type: ignore
+        self.actionsaves.triggered.connect(MainWindow.S)  # type: ignore
+        self.actionsave.triggered.connect(MainWindow.save)  # type: ignore
+        self.actionnew.triggered.connect(MainWindow.new)  # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -126,7 +129,7 @@ class Ui_MainWindow(object):
         self.actionabout.setText(_translate("MainWindow", "关于Compiler"))
         self.actionopen.setText(_translate("MainWindow", "打开(O)"))
         self.actionsave.setText(_translate("MainWindow", "保存(S)"))
-        self.actionsaveas.setText(_translate("MainWindow", "另存为(A)"))
+        self.actionsaves.setText(_translate("MainWindow", "另存为(A)"))
         self.actionquit.setText(_translate("MainWindow", "退出(Q)"))
         self.actionW.setText(_translate("MainWindow", "词法分析(W)"))
         self.actionP.setText(_translate("MainWindow", "语法分析(P)"))
