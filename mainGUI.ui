@@ -69,6 +69,7 @@
      <string>词法分析(W)</string>
     </property>
     <addaction name="actionW"/>
+    <addaction name="actionD"/>
    </widget>
    <widget class="QMenu" name="menu_4">
     <property name="title">
@@ -165,6 +166,11 @@
   <action name="actionO">
    <property name="text">
     <string>目标代码(O)</string>
+   </property>
+  </action>
+  <action name="actionD">
+   <property name="text">
+    <string>识别单词(D)</string>
    </property>
   </action>
  </widget>
@@ -346,6 +352,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionD</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>D()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>417</x>
+     <y>298</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>openFile()</slot>
@@ -358,5 +380,6 @@
   <slot>S()</slot>
   <slot>save()</slot>
   <slot>new()</slot>
+  <slot>D()</slot>
  </slots>
 </ui>

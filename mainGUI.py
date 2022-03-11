@@ -78,12 +78,15 @@ class Ui_MainWindow(object):
         self.actionM.setObjectName("actionM")
         self.actionO = QtWidgets.QAction(MainWindow)
         self.actionO.setObjectName("actionO")
+        self.actionD = QtWidgets.QAction(MainWindow)
+        self.actionD.setObjectName("actionD")
         self.menu.addAction(self.actionnew)
         self.menu.addAction(self.actionopen)
         self.menu.addAction(self.actionsave)
         self.menu.addAction(self.actionsaves)
         self.menu.addAction(self.actionquit)
         self.menu_3.addAction(self.actionW)
+        self.menu_3.addAction(self.actionD)
         self.menu_4.addAction(self.actionP)
         self.menu_5.addAction(self.actionM)
         self.menu_6.addAction(self.actionO)
@@ -110,6 +113,7 @@ class Ui_MainWindow(object):
         self.actionsaves.triggered.connect(MainWindow.S)  # type: ignore
         self.actionsave.triggered.connect(MainWindow.save)  # type: ignore
         self.actionnew.triggered.connect(MainWindow.new)  # type: ignore
+        self.actionD.triggered.connect(MainWindow.D)  # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -135,3 +139,4 @@ class Ui_MainWindow(object):
         self.actionP.setText(_translate("MainWindow", "语法分析(P)"))
         self.actionM.setText(_translate("MainWindow", "中间代码(M)"))
         self.actionO.setText(_translate("MainWindow", "目标代码(O)"))
+        self.actionD.setText(_translate("MainWindow", "识别单词(D)"))

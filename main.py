@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from Compiler.aboutGUI import Ui_about
 from Compiler.helpGUI import Ui_help
 from Compiler.mainGUI import Ui_MainWindow
+from Compiler.Lex import Lex
 
 
 class PerGUI(Ui_MainWindow, QMainWindow):
@@ -59,8 +60,17 @@ class PerGUI(Ui_MainWindow, QMainWindow):
 
     # 词法分析
     def W(self):
+        self.data = self.textEdit_3.toPlainText()  # 更新输入框中的内容
         self.textEdit.setText(self.data)
         self.textEdit_2.setText(self.data)
+
+    # 识别单词
+    def D(self):
+        self.data = self.textEdit_3.toPlainText()  # 更新输入框中的内容
+        lex = Lex()
+        self.textEdit.setText(lex.fun(self.data))
+        print(lex.tochen)
+        self.textEdit_2.setText(str(lex.tochen))
 
     # 语法分析
     def P(self):
