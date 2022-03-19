@@ -86,7 +86,6 @@ class Ui_MainWindow(object):
         self.menu.addAction(self.actionsaves)
         self.menu.addAction(self.actionquit)
         self.menu_3.addAction(self.actionW)
-        self.menu_3.addAction(self.actionD)
         self.menu_4.addAction(self.actionP)
         self.menu_5.addAction(self.actionM)
         self.menu_6.addAction(self.actionO)
@@ -102,18 +101,17 @@ class Ui_MainWindow(object):
         self.menuBar.addAction(self.menu_8.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.actionquit.triggered.connect(MainWindow.close)  # type: ignore
-        self.actionopen.triggered.connect(MainWindow.openFile)  # type: ignore
-        self.actionW.triggered.connect(MainWindow.W)  # type: ignore
-        self.actionM.triggered.connect(MainWindow.M)  # type: ignore
-        self.actionO.triggered.connect(MainWindow.O)  # type: ignore
-        self.actionP.triggered.connect(MainWindow.P)  # type: ignore
-        self.actionhelp.triggered.connect(MainWindow.H)  # type: ignore
-        self.actionabout.triggered.connect(MainWindow.A)  # type: ignore
-        self.actionsaves.triggered.connect(MainWindow.S)  # type: ignore
-        self.actionsave.triggered.connect(MainWindow.save)  # type: ignore
-        self.actionnew.triggered.connect(MainWindow.new)  # type: ignore
-        self.actionD.triggered.connect(MainWindow.D)  # type: ignore
+        self.actionquit.triggered.connect(MainWindow.close) # type: ignore
+        self.actionopen.triggered.connect(MainWindow.openFile) # type: ignore
+        self.actionW.triggered.connect(MainWindow.W) # type: ignore
+        self.actionM.triggered.connect(MainWindow.M) # type: ignore
+        self.actionO.triggered.connect(MainWindow.O) # type: ignore
+        self.actionP.triggered.connect(MainWindow.P) # type: ignore
+        self.actionhelp.triggered.connect(MainWindow.H) # type: ignore
+        self.actionabout.triggered.connect(MainWindow.A) # type: ignore
+        self.actionsaves.triggered.connect(MainWindow.S) # type: ignore
+        self.actionsave.triggered.connect(MainWindow.save) # type: ignore
+        self.actionnew.triggered.connect(MainWindow.new) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

@@ -15,12 +15,19 @@ class Lex:
                        '/': 207, '%': 208, '+': 209, '-': 210, '<': 211, '<=': 212, '>': 213, '>=': 214, '==': 215,
                        '!=': 216, '&&': 217, '||': 218, '=': 219, '.': 220, '++': 221, '+=': 222, '--': 223, '-=': 224}
         self.tochen = []  # 最终输出的tochen串
+        self.Apath = 'C:/Users/西~南~北/Desktop/test1.txt'  # 记录绝对路径，后面保存要用
         self.data = []
         self.flag = 0  # 多行注释标志
         self.error = 0  # 错误标志
         self.a = 0  # 单词起点
         self.b = 0  # 单词终点
         self.flagword = 0  # lagword=1:正确单词可以裁剪；flagword==0:不合法的单词不可裁剪
+
+    # 打开文件
+    def openfile(self):
+        f = open(self.Apath, 'r', encoding='utf-8')
+        with f:
+            self.data = f.readlines()
 
     # 裁剪函数：line:裁剪的哪一行;num：裁剪出单词的种别码
     def cut(self, line, num):
@@ -250,3 +257,10 @@ class Lex:
                         self.tochen.append('第' + str(self.data.index(line) + 1) + '行有不合法的单词')
                         while line[i] not in [' ', '\n', '\t']:
                             i = i + 1
+
+
+if __name__ == '__main__':
+    lex = Lex()
+    lex.openfile()
+    lex.lexfun()
+    print(lex.tochen)

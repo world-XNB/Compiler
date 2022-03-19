@@ -22,6 +22,8 @@ class PerGUI(Ui_MainWindow, QMainWindow):
         self.result = None
         # 打开文件的绝对路径
         self.Apath = None
+        # 字符串形式的文件内容
+        self.strdata = None
 
     # 新建
     def new(self):
@@ -36,8 +38,11 @@ class PerGUI(Ui_MainWindow, QMainWindow):
         if fname[0]:
             f = open(self.Apath, 'r', encoding='utf-8')
             with f:
-                self.data = f.read()
-                self.textEdit_3.setText(self.data)
+                self.data = f.readlines()
+                self.strdata = ''
+                for i in self.data:
+                    self.strdata = self.strdata + str(self.data.index(i) + 1) + "\t" + i
+                self.textEdit_3.setText(self.strdata)
                 self.textEdit_2.setText('')
                 self.textEdit.setText('')
 
@@ -60,32 +65,37 @@ class PerGUI(Ui_MainWindow, QMainWindow):
 
     # 词法分析
     def W(self):
-        self.data = self.textEdit_3.toPlainText()  # 更新输入框中的内容
-        self.textEdit.setText(self.data)
-        self.textEdit_2.setText(self.data)
+        lex = Lex()
+        lex.data = self.data
+        lex.lexfun()
+        text1 = '\t\t\ttochen串\n'
+        text2 = '\t\t\t编译结果\n'
+        for i in lex.tochen:
+            if '有不合法的单词' in i:
+                text2 = text2 + i + '\n'
+                self.textEdit_2.setText(text2)
+            else:
+                text1 = text1 + i + '\n'
+                self.textEdit.setText(text1)
 
     # 识别单词
     def D(self):
         self.data = self.textEdit_3.toPlainText()  # 更新输入框中的内容
-        lex = Lex()
-        self.textEdit.setText(lex.fun(self.data))
-        print(lex.tochen)
-        self.textEdit_2.setText(str(lex.tochen))
 
     # 语法分析
     def P(self):
-        self.textEdit.setText(self.data)
-        self.textEdit_2.setText(self.data)
+        self.textEdit.setText(self.strdata)
+        self.textEdit_2.setText(self.strdata)
 
     # 中间代码
     def M(self):
-        self.textEdit.setText(self.data)
-        self.textEdit_2.setText(self.data)
+        self.textEdit.setText(self.strdata)
+        self.textEdit_2.setText(self.strdata)
 
     # 目标代码
     def O(self):
-        self.textEdit.setText(self.data)
-        self.textEdit_2.setText(self.data)
+        self.textEdit.setText(self.strdata)
+        self.textEdit_2.setText(self.strdata)
 
     # 帮助
     def H(self):

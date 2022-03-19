@@ -1,0 +1,25 @@
+0x34
+a/_b
+00.231
+_da^&da1
+$ char a='a'
+string str="sas"
+1.23e-2131
+1.2e2+3
+0.213e21
+1.2
+0x34
+_a adas ada
+21 /*adsjasdoja*/
+world/*jd
+dsj
+is*/
+02931 //sd
+0xare12 //023 
+++
+-=
+>==3
+void main()
+{
+	int a=0;
+}
