@@ -71,7 +71,7 @@ class PerGUI(Ui_MainWindow, QMainWindow):
         text1 = '\t\t\ttochen串\n'
         text2 = '\t\t\t编译结果\n'
         for i in lex.tochen:
-            if '有不合法的单词' in i:
+            if '有不合法的' in i:
                 text2 = text2 + i + '\n'
                 self.textEdit_2.setText(text2)
             else:

@@ -34,7 +34,9 @@ class Lex:
                 self.tochen.append('(' + str(num) + ',"' + temp + '")')
             self.flagword = 0
         else:
-            self.tochen.append('第' + str(self.data.index(line) + 1) + '行有不合法的单词')
+            self.tochen.append(
+                '第' + str(self.data.index(line) + 1) + '行有不合法的' + list(self.sample.keys())[
+                    list(self.sample.values()).index(num)])
 
     def lexfun(self):
         for line in self.data:
