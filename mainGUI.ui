@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>835</width>
-    <height>597</height>
+    <width>1000</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,9 +18,9 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>20</y>
-      <width>821</width>
-      <height>541</height>
+      <y>10</y>
+      <width>991</width>
+      <height>651</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -45,7 +45,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>835</width>
+     <width>1000</width>
      <height>26</height>
     </rect>
    </property>
@@ -69,12 +69,14 @@
      <string>词法分析(W)</string>
     </property>
     <addaction name="actionW"/>
+    <addaction name="actionDFA"/>
    </widget>
    <widget class="QMenu" name="menu_4">
     <property name="title">
      <string>语法分析(P)</string>
     </property>
     <addaction name="actionP"/>
+    <addaction name="actionLL_1"/>
    </widget>
    <widget class="QMenu" name="menu_5">
     <property name="title">
@@ -170,6 +172,16 @@
   <action name="actionD">
    <property name="text">
     <string>识别单词(D)</string>
+   </property>
+  </action>
+  <action name="actionDFA">
+   <property name="text">
+    <string>有穷自动机(DFA)</string>
+   </property>
+  </action>
+  <action name="actionLL_1">
+   <property name="text">
+    <string>LL(1)</string>
    </property>
   </action>
  </widget>
@@ -351,6 +363,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionDFA</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>DFA()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>417</x>
+     <y>298</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionLL_1</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>LL1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>499</x>
+     <y>349</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>openFile()</slot>
@@ -364,5 +408,7 @@
   <slot>save()</slot>
   <slot>new()</slot>
   <slot>D()</slot>
+  <slot>DFA()</slot>
+  <slot>LL1()</slot>
  </slots>
 </ui>

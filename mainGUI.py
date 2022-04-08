@@ -14,11 +14,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(835, 597)
+        MainWindow.resize(1000, 700)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(0, 20, 821, 541))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(0, 10, 991, 651))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -37,7 +37,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addLayout(self.verticalLayout)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menuBar = QtWidgets.QMenuBar(MainWindow)
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 835, 26))
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1000, 26))
         self.menuBar.setObjectName("menuBar")
         self.menu = QtWidgets.QMenu(self.menuBar)
         self.menu.setObjectName("menu")
@@ -80,13 +80,19 @@ class Ui_MainWindow(object):
         self.actionO.setObjectName("actionO")
         self.actionD = QtWidgets.QAction(MainWindow)
         self.actionD.setObjectName("actionD")
+        self.actionDFA = QtWidgets.QAction(MainWindow)
+        self.actionDFA.setObjectName("actionDFA")
+        self.actionLL_1 = QtWidgets.QAction(MainWindow)
+        self.actionLL_1.setObjectName("actionLL_1")
         self.menu.addAction(self.actionnew)
         self.menu.addAction(self.actionopen)
         self.menu.addAction(self.actionsave)
         self.menu.addAction(self.actionsaves)
         self.menu.addAction(self.actionquit)
         self.menu_3.addAction(self.actionW)
+        self.menu_3.addAction(self.actionDFA)
         self.menu_4.addAction(self.actionP)
+        self.menu_4.addAction(self.actionLL_1)
         self.menu_5.addAction(self.actionM)
         self.menu_6.addAction(self.actionO)
         self.menu_8.addAction(self.actionhelp)
@@ -112,6 +118,8 @@ class Ui_MainWindow(object):
         self.actionsaves.triggered.connect(MainWindow.S) # type: ignore
         self.actionsave.triggered.connect(MainWindow.save) # type: ignore
         self.actionnew.triggered.connect(MainWindow.new) # type: ignore
+        self.actionDFA.triggered.connect(MainWindow.DFA) # type: ignore
+        self.actionLL_1.triggered.connect(MainWindow.LL1) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -138,3 +146,5 @@ class Ui_MainWindow(object):
         self.actionM.setText(_translate("MainWindow", "中间代码(M)"))
         self.actionO.setText(_translate("MainWindow", "目标代码(O)"))
         self.actionD.setText(_translate("MainWindow", "识别单词(D)"))
+        self.actionDFA.setText(_translate("MainWindow", "有穷自动机(DFA)"))
+        self.actionLL_1.setText(_translate("MainWindow", "LL(1)"))

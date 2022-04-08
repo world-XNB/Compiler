@@ -6,12 +6,15 @@ import sys
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 
+from Compiler.LL1GUI import Ui_LL1
 from Compiler.aboutGUI import Ui_about
+from Compiler.Parser import Parser
 from Compiler.helpGUI import Ui_help
 from Compiler.mainGUI import Ui_MainWindow
-from Compiler.Lex import Lex
+from Compiler.Lex import Lex, dfaGUI
 
 
+# 继承主界面
 class PerGUI(Ui_MainWindow, QMainWindow):
     def __init__(self):
         super(PerGUI, self).__init__()
@@ -78,14 +81,22 @@ class PerGUI(Ui_MainWindow, QMainWindow):
                 text1 = text1 + i + '\n'
                 self.textEdit.setText(text1)
 
-    # 识别单词
-    def D(self):
-        self.data = self.textEdit_3.toPlainText()  # 更新输入框中的内容
+    # 有穷自动机
+    def DFA(self):
+        self.dfa = dfaGUI()
+        self.dfa.show()
 
     # 语法分析
     def P(self):
+        parser = Parser()
+        print(parser.judge())
         self.textEdit.setText(self.strdata)
         self.textEdit_2.setText(self.strdata)
+
+    # LL1
+    def LL1(self):
+        self.ll1 = LL1GUI()
+        self.ll1.show()
 
     # 中间代码
     def M(self):
@@ -125,6 +136,12 @@ class helpGUI(Ui_help, QMainWindow):
 class aboutGUI(Ui_about, QMainWindow):
     def __init__(self):
         super(aboutGUI, self).__init__()
+        self.setupUi(self)
+
+
+class LL1GUI(Ui_LL1, QMainWindow):
+    def __init__(self):
+        super(LL1GUI, self).__init__()
         self.setupUi(self)
 
 
