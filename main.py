@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 
 from Compiler.LL1GUI import Ui_LL1
 from Compiler.aboutGUI import Ui_about
-from Compiler.Parser import Parser
+from Compiler.Parser import Parser, LL1
 from Compiler.helpGUI import Ui_help
 from Compiler.mainGUI import Ui_MainWindow
 from Compiler.Lex import Lex, dfaGUI
@@ -71,6 +71,7 @@ class PerGUI(Ui_MainWindow, QMainWindow):
         lex = Lex()
         lex.data = self.data
         lex.lexfun()
+        print(lex.tochen)
         text1 = '\t\t\ttochen串\n'
         text2 = '\t\t\t编译结果\n'
         for i in lex.tochen:
@@ -88,8 +89,8 @@ class PerGUI(Ui_MainWindow, QMainWindow):
 
     # 语法分析
     def P(self):
-        parser = Parser()
-        print(parser.judge())
+        ll = LL1()
+        print(ll.judge())
         self.textEdit.setText(self.strdata)
         self.textEdit_2.setText(self.strdata)
 

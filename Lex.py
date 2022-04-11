@@ -4,8 +4,6 @@
 # @File : Test.py
 # @Software: PyCharm
 
-
-# 词法分析类
 import re
 import matplotlib
 import networkx as nx
@@ -19,6 +17,7 @@ from Compiler.dfaGUI import Ui_DFA
 matplotlib.rcParams['font.sans-serif'] = ['KaiTi']
 
 
+# 词法分析类
 class Lex:
     def __init__(self):
         # 'integer': 整数, 'character': 字符, 'charstr': 字符串, 'identifier': 标识符', 'realnum': 实数（float） sample语言单词的种别码
