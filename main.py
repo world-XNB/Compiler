@@ -27,6 +27,8 @@ class PerGUI(Ui_MainWindow, QMainWindow):
         self.Apath = None
         # 字符串形式的文件内容
         self.strdata = None
+        # 用于衔接词法分析与语法分析
+        self.tochen = []
 
     # 新建
     def new(self):
@@ -40,6 +42,7 @@ class PerGUI(Ui_MainWindow, QMainWindow):
         self.Apath = fname[0]  # 记录绝对路径，后面保存要用
         if fname[0]:
             f = open(self.Apath, 'r', encoding='utf-8')
+            # f = open(self.Apath, 'r')
             with f:
                 self.data = f.readlines()
                 self.strdata = ''
@@ -71,7 +74,7 @@ class PerGUI(Ui_MainWindow, QMainWindow):
         lex = Lex()
         lex.data = self.data
         lex.lexfun()
-        print(lex.tochen)
+        self.tochen = lex.tochen
         text1 = '\t\t\ttochen串\n'
         text2 = '\t\t\t编译结果\n'
         for i in lex.tochen:
@@ -89,10 +92,16 @@ class PerGUI(Ui_MainWindow, QMainWindow):
 
     # 语法分析
     def P(self):
-        ll = LL1()
-        print(ll.judge())
-        self.textEdit.setText(self.strdata)
-        self.textEdit_2.setText(self.strdata)
+        parser = Parser()
+        parser.tochen = self.tochen
+        # print(parser.tochen)
+        parser.pro()
+        if parser.pos == len(parser.tochen) - 1:
+            print("正确程序")
+            self.textEdit_2.setText("正确程序")
+        else:
+            print("错误程序")
+            self.textEdit_2.setText("错误程序")
 
     # LL1
     def LL1(self):

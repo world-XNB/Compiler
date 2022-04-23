@@ -23,18 +23,18 @@ class Lex:
         # 'integer': 整数, 'character': 字符, 'charstr': 字符串, 'identifier': 标识符', 'realnum': 实数（float） sample语言单词的种别码
         self.sample = {'char': 101, 'int': 102, 'float': 103, 'break': 104, 'const': 105, 'return': 106, 'void': 107,
                        'continue': 108, 'do': 109, 'while': 110, 'if': 111, 'else': 112, 'for': 113, 'string': 114,
-                       'bool': 115, 'scanf': 116, 'printf': 117, 'include': 118, '{': 301, '}': 302, ';': 303, ',': 304,
-                       'integer': 400,
-                       'character': 500, 'charstr': 600, 'identifier': 700, 'realnum': 800, '(': 201, ')': 202,
-                       '[': 203, ']': 204, '!': 205, '*': 206, '/': 207, '%': 208, '+': 209, '-': 210, '<': 211,
-                       '<=': 212, '>': 213, '>=': 214, '==': 215, '!=': 216, '&&': 217, '||': 218, '=': 219, '.': 220,
-                       '++': 221, '+=': 222, '--': 223, '-=': 224, '&': 225, '#': 226}
+                       'bool': 115, 'scanf': 116, 'printf': 117, 'include': 118, 'main': 119, '{': 301, '}': 302,
+                       ';': 303, ',': 304,
+                       'integer': 400, 'character': 500, 'charstr': 600, 'identifier': 700, 'realnum': 800, '(': 201,
+                       ')': 202, '[': 203, ']': 204, '!': 205, '*': 206, '/': 207, '%': 208, '+': 209, '-': 210,
+                       '<': 211, '<=': 212, '>': 213, '>=': 214, '==': 215, '!=': 216, '&&': 217, '||': 218, '=': 219,
+                       '.': 220, '++': 221, '+=': 222, '--': 223, '-=': 224, '&': 225, '#': 226}
         self.tochen = []  # 最终输出的tochen串
         self.data = []
         self.flag = 0  # 多行注释标志
         self.a = 0  # 单词起点
         self.b = 0  # 单词终点
-        self.flagword = 0  # lagword=1:正确单词可以裁剪；flagword==0:不合法的单词不可裁剪
+        self.flagword = 0  # lagword=1:正确单词可以裁剪；flagword==0:不合法的单词不可裁
 
     # 裁剪函数：line:裁剪的哪一行;num：裁剪出单词的种别码
     def cut(self, line, num):
@@ -151,7 +151,7 @@ class Lex:
 
                     elif line[i] in self.sample.keys():
                         self.tochen.append('(102,"0")')
-                        i = i + 1
+                        # i = i + 1
                     else:
                         while line[i] not in [' ', '\t', '\n']:
                             i = i + 1
@@ -278,6 +278,18 @@ class Lex:
                             self.b = i
                             self.flagword = 1
                             self.cut(line, 217)
+                        else:
+                            i = i - 1
+                            self.tochen.append('(' + str(self.sample[line[i]]) + ',' + line[i] + ')')
+                            i = i + 1
+                    elif line[i] == '|':
+                        self.a = i
+                        i = i + 1
+                        if line[i] in ['|']:
+                            i = i + 1
+                            self.b = i
+                            self.flagword = 1
+                            self.cut(line, 218)
                         else:
                             i = i - 1
                             self.tochen.append('(' + str(self.sample[line[i]]) + ',' + line[i] + ')')
