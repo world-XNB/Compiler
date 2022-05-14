@@ -4,6 +4,7 @@
 # @File : Test.py
 # @Software: PyCharm
 
+import os
 import re
 import matplotlib
 import networkx as nx
@@ -24,17 +25,20 @@ class Lex:
         self.sample = {'char': 101, 'int': 102, 'float': 103, 'break': 104, 'const': 105, 'return': 106, 'void': 107,
                        'continue': 108, 'do': 109, 'while': 110, 'if': 111, 'else': 112, 'for': 113, 'string': 114,
                        'bool': 115, 'scanf': 116, 'printf': 117, 'include': 118, 'main': 119, '{': 301, '}': 302,
-                       ';': 303, ',': 304,
-                       'integer': 400, 'character': 500, 'charstr': 600, 'identifier': 700, 'realnum': 800, '(': 201,
-                       ')': 202, '[': 203, ']': 204, '!': 205, '*': 206, '/': 207, '%': 208, '+': 209, '-': 210,
-                       '<': 211, '<=': 212, '>': 213, '>=': 214, '==': 215, '!=': 216, '&&': 217, '||': 218, '=': 219,
-                       '.': 220, '++': 221, '+=': 222, '--': 223, '-=': 224, '&': 225, '#': 226}
+                       ';': 303, ',': 304, 'integer': 400, 'character': 500, 'charstr': 600, 'identifier': 700,
+                       'realnum': 800, '(': 201, ')': 202, '[': 203, ']': 204, '!': 205, '*': 206, '/': 207, '%': 208,
+                       '+': 209, '-': 210, '<': 211, '<=': 212, '>': 213, '>=': 214, '==': 215, '!=': 216, '&&': 217,
+                       '||': 218, '=': 219, '.': 220, '++': 221, '+=': 222, '--': 223, '-=': 224, '&': 225, '#': 226,
+                       '|': 227}
         self.tochen = []  # 最终输出的tochen串
         self.data = []
         self.flag = 0  # 多行注释标志
         self.a = 0  # 单词起点
         self.b = 0  # 单词终点
         self.flagword = 0  # lagword=1:正确单词可以裁剪；flagword==0:不合法的单词不可裁
+        self.rows = {}  # 记录tochen串的行数
+        self.count = 0  # 辅助rows记录上一行数
+        self.lastline = ""  # 辅助rows记录上一行数
 
     # 裁剪函数：line:裁剪的哪一行;num：裁剪出单词的种别码
     def cut(self, line, num):
@@ -43,14 +47,28 @@ class Lex:
             for t in range(self.a, self.b):
                 temp = temp + line[t]
             if temp in self.sample.keys():
-                self.tochen.append('(' + str(self.sample[temp]) + ',"' + temp + '")')
+                self.tochen.append('(' + str(self.sample[temp]) + ',' + temp + ')')
+                self.getrows(line)
             else:
-                self.tochen.append('(' + str(num) + ',"' + temp + '")')
+                self.tochen.append('(' + str(num) + ',' + temp + ')')
+                self.getrows(line)
             self.flagword = 0
         else:
             self.tochen.append(
                 '第' + str(self.data.index(line) + 1) + '行有不合法的' + list(self.sample.keys())[
                     list(self.sample.values()).index(num)])
+
+    # 记录行数
+    def getrows(self, line):
+        if self.data.index(line) + 1 < self.count:
+            self.rows[len(self.tochen)] = self.count + 1  # 记录tochen的行数
+            self.count = self.rows[len(self.tochen)]
+            if line == self.lastline:
+                self.count = self.count - 1
+        else:
+            self.rows[len(self.tochen)] = self.data.index(line) + 1  # 记录tochen的行数
+            self.count = self.rows[len(self.tochen)]
+        self.lastline = line
 
     # 词法分析函数
     def lexfun(self):
@@ -151,6 +169,8 @@ class Lex:
 
                     elif line[i] in self.sample.keys():
                         self.tochen.append('(102,"0")')
+                        self.getrows(line)
+
                         # i = i + 1
                     else:
                         while line[i] not in [' ', '\t', '\n']:
@@ -172,6 +192,8 @@ class Lex:
                             break
                     elif line[i].isalnum() or line[i] == '_':
                         self.tochen.append('(207,"/")')
+                        self.getrows(line)
+
 
                 # 判断空格
                 elif line[i] in [' ', '\t']:
@@ -213,12 +235,14 @@ class Lex:
                 else:
                     # 运算符
                     if line[i] in self.sample.keys() and line[i] not in ['/', '<', '>', '=', '!', '&', '+', '-', '{',
-                                                                         '}', ';', ',']:
+                                                                         '}', ';', ',', '|']:
                         if line[i] == '.' and line[i + 1].isdigit():
                             while line[i] not in [' ', '\t', '\n']:
                                 i = i + 1
                         else:
                             self.tochen.append('(' + str(self.sample[line[i]]) + ',' + line[i] + ')')
+                            self.getrows(line)
+
                             i = i + 1
 
                     elif line[i] in ['<', '>', '=', '!']:
@@ -239,6 +263,8 @@ class Lex:
                         else:
                             i = i - 1
                             self.tochen.append('(' + str(self.sample[line[i]]) + ',' + line[i] + ')')
+                            self.getrows(line)
+
                             i = i + 1
                     elif line[i] in ['+']:
                         self.a = i
@@ -254,6 +280,8 @@ class Lex:
                         else:
                             i = i - 1
                             self.tochen.append('(' + str(self.sample[line[i]]) + ',' + line[i] + ')')
+                            self.getrows(line)
+
                             i = i + 1
                     elif line[i] in ['-']:
                         self.a = i
@@ -269,6 +297,8 @@ class Lex:
                         else:
                             i = i - 1
                             self.tochen.append('(' + str(self.sample[line[i]]) + ',' + line[i] + ')')
+                            self.getrows(line)
+
                             i = i + 1
                     elif line[i] == '&':
                         self.a = i
@@ -281,6 +311,7 @@ class Lex:
                         else:
                             i = i - 1
                             self.tochen.append('(' + str(self.sample[line[i]]) + ',' + line[i] + ')')
+                            self.getrows(line)
                             i = i + 1
                     elif line[i] == '|':
                         self.a = i
@@ -293,14 +324,17 @@ class Lex:
                         else:
                             i = i - 1
                             self.tochen.append('(' + str(self.sample[line[i]]) + ',' + line[i] + ')')
+                            self.getrows(line)
                             i = i + 1
                     # 界符
                     elif line[i] in ['{', '}', ';', ',']:
                         self.tochen.append('(' + str(self.sample[line[i]]) + ',' + line[i] + ')')
+                        self.getrows(line)
                         i = i + 1
                     # 其他
                     else:
                         self.tochen.append('第' + str(self.data.index(line) + 1) + '行有不合法的单词')
+                        self.getrows(line)
                         while line[i] not in [' ', '\n', '\t']:
                             i = i + 1
 
@@ -326,6 +360,13 @@ class dfaGUI(Ui_DFA, QMainWindow):
         self.mfacount = 1  # 记录区分的状态
         self.mfaflag = 0  # 记录是否递归   0：递归    1：不递归
         self.mfatemp = {}  # 记录区分的状态
+        self.delete()
+
+    # 删除本地以前的NFA DFA MFA图片
+    def delete(self):
+        for filname in os.listdir("./file"):
+            if filname in ["DFA.jpg", "NFA.jpg", "MFA.jpg"]:
+                os.remove("./file/" + filname)
 
     # 验证正则表达式
     def check(self):
@@ -416,7 +457,7 @@ class dfaGUI(Ui_DFA, QMainWindow):
             item = QGraphicsPixmapItem(pix)
             scene = QGraphicsScene()
             scene.addItem(item)
-            self.graphicsView.setScene(scene)
+            self.graphicsView_3.setScene(scene)
             # self.graphicsView.fitInView(item)  # 图像自适应
         else:
             print('该正则表达式不合法！')
@@ -478,7 +519,7 @@ class dfaGUI(Ui_DFA, QMainWindow):
         item = QGraphicsPixmapItem(pix)
         scene = QGraphicsScene()
         scene.addItem(item)
-        self.graphicsView_2.setScene(scene)
+        self.graphicsView_3.setScene(scene)
         # self.graphicsView_2.fitInView(item)  # 图像自适应
 
     # DFA到MFA的转换

@@ -29,6 +29,10 @@ class PerGUI(Ui_MainWindow, QMainWindow):
         self.strdata = None
         # 用于衔接词法分析与语法分析
         self.tochen = []
+        # 用于衔接词法分析与语法分析中的函数（错误分析）
+        self.rows = {}
+        # 语法树
+        self.treeData = ""
 
     # 新建
     def new(self):
@@ -46,8 +50,10 @@ class PerGUI(Ui_MainWindow, QMainWindow):
             with f:
                 self.data = f.readlines()
                 self.strdata = ''
+                r = 1
                 for i in self.data:
-                    self.strdata = self.strdata + str(self.data.index(i) + 1) + "\t" + i
+                    self.strdata = self.strdata + str(r) + "\t" + i
+                    r = r + 1
                 self.textEdit_3.setText(self.strdata)
                 self.textEdit_2.setText('')
                 self.textEdit.setText('')
@@ -75,6 +81,9 @@ class PerGUI(Ui_MainWindow, QMainWindow):
         lex.data = self.data
         lex.lexfun()
         self.tochen = lex.tochen
+        self.rows = lex.rows
+        print(self.tochen)
+        print(self.rows)
         text1 = '\t\t\ttochen串\n'
         text2 = '\t\t\t编译结果\n'
         for i in lex.tochen:
@@ -84,6 +93,7 @@ class PerGUI(Ui_MainWindow, QMainWindow):
             else:
                 text1 = text1 + i + '\n'
                 self.textEdit.setText(text1)
+                self.textEdit_2.setText("词法分析通过，正确程序")
 
     # 有穷自动机
     def DFA(self):
@@ -94,13 +104,19 @@ class PerGUI(Ui_MainWindow, QMainWindow):
     def P(self):
         parser = Parser()
         parser.tochen = self.tochen
-        # print(parser.tochen)
+        parser.rows = self.rows
         parser.pro()
-        if parser.pos == len(parser.tochen) - 1:
-            print("正确程序")
-            self.textEdit_2.setText("正确程序")
+        if parser.pos == len(parser.tochen) - 1 and parser.errorflag == 0:
+            for i in parser.syntaxTree:
+                self.treeData += i
+                self.treeData += "\n"
+            self.textEdit.setText(self.treeData)
+            self.textEdit_2.setText("语法分析通过，正确程序")
         else:
-            print("错误程序")
+            e = ""
+            for i in parser.error:
+                e += i + '\n'
+            self.textEdit.setText(e)
             self.textEdit_2.setText("错误程序")
 
     # LL1
@@ -130,7 +146,7 @@ class PerGUI(Ui_MainWindow, QMainWindow):
     # 关于compiler
     def A(self):
         self.about = aboutGUI()
-        file = open("./file/about.txt", "r", encoding='utf-8')
+        file = open("./readme.md", "r", encoding='utf-8')
         with file:
             d = file.read()
             self.about.textEdit.setText(d)

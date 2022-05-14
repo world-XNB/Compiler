@@ -1,3 +1,18 @@
-while(1){
-a=a+b;
-}
+	// 单行注释
+	/*
+	多行注释
+	*/
+	const int a_global = 2;
+	const int b_global = 3;
+	int fun1();
+	int fun2(int,int);
+	int fun3(int,float);
+	int a=1;
+
+	main()
+	{
+	    int a=2;
+	    int b=3;
+	    int a=2;
+	    return 1;
+	}

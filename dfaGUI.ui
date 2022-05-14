@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
-    <height>800</height>
+    <width>958</width>
+    <height>632</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,10 +16,10 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>16</y>
-     <width>981</width>
-     <height>781</height>
+     <x>11</x>
+     <y>17</y>
+     <width>931</width>
+     <height>571</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -50,10 +50,10 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <widget class="QGraphicsView" name="graphicsView"/>
-        </item>
+       <widget class="QGraphicsView" name="graphicsView_3"/>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QPushButton" name="pushButton_2">
           <property name="text">
@@ -61,26 +61,12 @@
           </property>
          </widget>
         </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <widget class="QGraphicsView" name="graphicsView_2"/>
-        </item>
         <item>
          <widget class="QPushButton" name="pushButton_3">
           <property name="text">
            <string>DFA</string>
           </property>
          </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_5">
-        <item>
-         <widget class="QGraphicsView" name="graphicsView_3"/>
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_4">

@@ -23,7 +23,6 @@ class LL1:
         f = open(f_path, 'r', encoding='utf-8')
         with f:
             data = f.readlines()
-
             for line in data:  # 逐行操作
                 l = []
                 values = []
@@ -187,66 +186,30 @@ class LL1:
 # 语法分析器的实现类
 class Parser:
     def __init__(self):
-        # self.tochen = ['(201,"(")', '(700,"e")', '(210,"-")', '(700,"f")', '(206,"*")', '(700,"a")', '(202,")")',
-        #                '(209,"+")', '(700,"b")', '(209,"+")', '(700,"c")', '(206,"*")', '(700,"d")']  # 测试算术表达式
-
-        # self.tochen = ['(700,"a")', '(217,"&&")', '(700,"b")']  # 测试布尔表达式——&&
-        # self.tochen = ['(700,"a")', '(217,"&&")', '(700,"b")', '(218,"||")', '(700,"c")']  # 测试布尔表达式——||
-        # self.tochen = ['(205,"!")', '(700,"c")', '(217,"&&")', '(700,"b")', '(218,"||")', '(700,"a")']  # 测试布尔表达式——！
-
-        # self.tochen = ['(700,"a")', '(213,">")', '(700,"b")']  # 测量关系表达式
-
-        # self.tochen = ['(700,"a")', '(213,">")', '(700,"b")', '(217,"&&")', '(700,"b")']  # 测试布尔表达式——&&
-        # self.tochen = ['(205,"!")', '(700,"c")''(700,"a")', '(213,">")', '(700,"b")', '(217,"&&")',
-        #                '(700,"b")']  # 测试布尔表达式包含关系表达式
-
-        # self.tochen = ['(700,"a")', '(219,"=")', '(700,"b")']  # 测试赋值表达式
-        # self.tochen = ['(700,"a")', '(219,"=")', '(201,"(")', '(700,"e")', '(210,"-")', '(700,"f")', '(206,"*")',
-        #                '(700,"a")', '(202,")")', '(209,"+")', '(700,"b")', '(209,"+")', '(700,"c")', '(206,"*")',
-        #                '(700,"d")']  # 测试赋值表达式
-
-        # self.tochen = ['(105,"const")', '(102,"int")', '(700,"a")', '(219,"=")', '(400,"10")', '(304,",")', '(700,"c")',
-        #                '(219,"=")', '(400,"20")', '(303,";")']  # 测试值声明语句
-        # self.tochen = ['(102,"int")', '(700,"fun")', '(201,"(")', '(102,"int")', '(700,"a")', '(202,")")',
-        #                '(303,";")']  # 测试值声明语句
-
-        # self.tochen = ['(700,"a")', '(219,"=")', '(700,"b")', '(303,";")']  # 测试赋值语句
-        # self.tochen = ['(700,"a")', '(219,"=")', '(201,"(")', '(700,"e")', '(210,"-")', '(700,"f")', '(206,"*")',
-        #                '(700,"a")', '(202,")")', '(209,"+")', '(700,"b")', '(209,"+")', '(700,"c")', '(206,"*")',
-        #                '(700,"d")', '(303,";")']  # 测试赋值语句
-
-        # self.tochen = ['(111,"if")', '(201,()', '(700,"a")', '(213,>)', '(700,"b")', '(202,))', '(700,"a")', '(219,=)',
-        #                '(700,"a")', '(209,+)', '(700,"b")', '(303,;)']  # 测量控制语句 if
-
-        # self.tochen = ['(111,"if")', '(201,()', '(700,"a")', '(213,>)', '(700,"b")', '(202,))', '(301,{)', '(700,"a")',
-        #                '(219,=)', '(700,"a")', '(209,+)', '(700,"b")', '(303,;)', '(700,"a")', '(219,=)', '(700,"a")',
-        #                '(210,-)', '(700,"b")', '(303,;)', '(302,})']  # 测量控制语句 if
-
-        # self.tochen = ['(113,"for")', '(201,()', '(700,"a")', '(303,;)', '(700,"a")', '(303,;)', '(700,"a")', '(202,))',
-        #                '(102,"int")', '(700,"a")', '(303,;)']  # 测量控制语句 for
-        # self.tochen = ['(110,"while")', '(201,()', '(102,"1")', '(202,))', '(301,{)', '(700,"a")', '(219,=)',
-        #                '(700,"a")', '(209,+)', '(700,"b")', '(303,;)', '(302,})']  # 测量控制语句 while
-        # self.tochen = ['(109,"do")', '(301,{)', '(111,"if")', '(201,()', '(700,"a")', '(213,>)', '(700,"b")', '(202,))',
-        #                '(700,"a")', '(219,=)', '(700,"a")', '(209,+)', '(700,"b")', '(303,;)', '(700,"a")', '(219,=)',
-        #                '(700,"a")', '(210,-)', '(700,"b")', '(303,;)', '(302,})', '(110,"while")', '(201,()',
-        #                '(700,"a")', '(202,))', '(303,;)']       # 测量控制语句 do while
-        self.tochen = ['(102,"int")', '(700,"comp")', '(201,()', '(102,"int")', '(304,,)', '(102,"int")', '(202,))',
-                       '(303,;)', '(119,"main")', '(201,()', '(202,))', '(301,{)', '(102,"int")', '(700,"m")',
-                       '(304,,)', '(700,"k")', '(304,,)', '(700,"result")', '(303,;)', '(700,"m")', '(219,=)',
-                       '(700,"read")', '(201,()', '(202,))', '(303,;)', '(700,"k")', '(219,=)', '(700,"read")',
-                       '(201,()', '(202,))', '(303,;)', '(700,"result")', '(219,=)', '(700,"comp")', '(201,()',
-                       '(700,"m")', '(304,,)', '(700,"k")', '(202,))', '(303,;)', '(700,"write")', '(201,()',
-                       '(700,"result")', '(202,))', '(303,;)', '(302,})', '(102,"int")', '(700,"comp")', '(201,()',
-                       '(102,"int")', '(700,"n")', '(304,,)', '(102,"int")', '(700,"i")', '(202,))', '(301,{)',
-                       '(102,"int")', '(700,"a")', '(304,,)', '(700,"b")', '(303,;)', '(111,"if")', '(201,()',
-                       '(700,"n")', '(215,"==")', '(700,"i")', '(218,"||")', '(700,"i")', '(215,"==")', '(102,"0")',
-                       '(202,))', '(301,{)', '(106,"return")', '(102,"1")', '(303,;)', '(302,})', '(700,"a")',
-                       '(219,=)', '(700,"comp")', '(201,()', '(700,"n")', '(210,-)', '(102,"1")', '(304,,)',
-                       '(700,"i")', '(202,))', '(303,;)', '(700,"b")', '(219,=)', '(700,"comp")', '(201,()',
-                       '(700,"n")', '(210,-)', '(102,"1")', '(304,,)', '(700,"i")', '(210,-)', '(102,"1")', '(202,))',
-                       '(303,;)', '(106,"return")', '(700,"a")', '(209,+)', '(700,"b")', '(303,;)']
+        self.syntaxTree = ["程序"]  # 语法树
+        self.level = 0  # 语法树的级别
+        self.tochen = ['(102,int)', '(700,comp)', '(201,()', '(102,int)', '(304,,)', '(102,int)', '(202,))', '(303,;)',
+                       '(119,main)', '(201,()', '(202,))', '(301,{)', '(102,int)', '(700,m)', '(304,,)', '(700,k)',
+                       '(304,,)', '(700,result)', '(303,;)', '(700,m)', '(219,=)', '(700,read)', '(201,()', '(202,))',
+                       '(303,;)', '(700,k)', '(219,=)', '(700,read)', '(201,()', '(202,))', '(303,;)', '(700,result)',
+                       '(219,=)', '(700,comp)', '(201,()', '(700,m)', '(304,,)', '(700,k)', '(202,))', '(303,;)',
+                       '(700,write)', '(201,()', '(700,result)', '(202,))', '(303,;)', '(302,})', '(102,int)',
+                       '(700,comp)', '(201,()', '(102,int)', '(700,n)', '(304,,)', '(102,int)', '(700,i)', '(202,))',
+                       '(301,{)', '(102,int)', '(700,a)', '(304,,)', '(700,b)', '(303,;)', '(111,if)', '(201,()',
+                       '(700,n)', '(215,==)', '(700,i)', '(227,|)', '(227,|)', '(700,i)', '(215,==)', '(102,"0")',
+                       '(202,))', '(301,{)', '(106,return)', '(102,1)', '(303,;)', '(302,})', '(700,a)', '(219,=)',
+                       '(700,comp)', '(201,()', '(700,n)', '(210,-)', '(102,1)', '(304,,)', '(700,i)', '(202,))',
+                       '(303,;)', '(700,b)', '(219,=)', '(700,comp)', '(201,()', '(700,n)', '(210,-)', '(102,1)',
+                       '(304,,)', '(700,i)', '(210,-)', '(102,1)', '(202,))', '(303,;)', '(106,return)', '(700,a)',
+                       '(209,+)', '(700,b)', '(303,;)', '(302,})']
 
         self.pos = -1  # 记录访问tochen的位置
+        self.error = []  # 记录语法错误
+        self.symss = []  # 错误处理——采用应急模式中的同步词法符号集
+        self.rows = {}
+        self.errorflag = 0  # 判断是否有错误
+
+        self.lastrow = 0  # 用于geterror()函数
 
     # 获取下一个tochen串的种别码
     def getnexttochen(self):
@@ -258,17 +221,36 @@ class Parser:
             self.pos = self.pos + 1
             return self.tochen[len(self.tochen) - 1].split(',')[0].strip('(')  # 返回最后一个种别码
 
+    # 添加树枝
+    def grow(self, Str):
+        str = "|"
+        temp = self.level
+        while temp:
+            str += "--"
+            temp = temp - 1
+        str += Str
+        self.syntaxTree.append(str)
+
+    def geterrors(self, s):
+        self.errorflag = 1
+        row = self.rows[self.pos + 1]
+        if row > self.lastrow:
+            self.error.append("第" + str(row) + "行出现" + s)
+        self.lastrow = row
+
     # 算术表达式~~~~~~~~~~~~~~~~~~~~~~~~++++++++++++++++++++++++++++++++表达式部分++++++++++++++++++++++++++++++++
     def aexpr(self):
+        self.level = self.level + 1
         self.term()  # 处理乘除，取负和括号部分
         while True:
             str = self.getnexttochen()
             if str in ['209', '210']:  # //处理 +,-
-                # str = self.getnexttochen()
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
                 self.term()  # 处理 + - 之后的部分
             else:
                 self.pos = self.pos - 1  # 退回当前取出的token字
                 break
+        self.level = self.level - 1
 
     # 处理乘除，取负和括号部分
     def term(self):
@@ -276,7 +258,7 @@ class Parser:
         while True:
             str = self.getnexttochen()
             if str in ['206', '207', '208']:  # 处理 * / %
-                # str = self.getnexttochen()
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
                 self.factor()  # 递归调用，* / 之后跟随的另一个项
             else:
                 self.pos = self.pos - 1  # 退回当前取出的token字
@@ -286,32 +268,38 @@ class Parser:
     def factor(self):
         str = self.getnexttochen()
         if str == '201':  # 处理括号
-            # self.getnexttochen()
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             self.aexpr()  # 调用表达式的分析
             str = self.getnexttochen()
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             if str != '202':
                 print("ERROR，缺少 ） ")
         elif str == '-':  # 处理弹幕取负
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             self.aexpr()
         elif str not in ['101', '102', '103', '400', '500', '600', '700', '800']:  # 单个常量、变量
             self.pos = self.pos - 1
         elif str == '700':
             if self.getnexttochen() == '201':  # 处理 ( ——函数调用
                 self.pos = self.pos - 2
+                self.grow("函数调用")
                 self.funcall()  # 函数调用
             else:
                 self.pos = self.pos - 1
 
     # 布尔表达式~~~~~~~~~~~~~~~~~~~~~~~~
     def bexpr(self):
+        self.level = self.level + 1
         self.boolt()  # 与的优先级大于或的优先级
         if self.pos == len(self.tochen) - 1:
             return
         self.orfun()
+        self.level = self.level - 1
 
     # 或运算
     def orfun(self):
         if self.getnexttochen() == '218':
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             self.boolt()  # 布尔项
             self.orfun()
         else:
@@ -327,6 +315,7 @@ class Parser:
     # 与运算
     def andfun(self):
         if self.getnexttochen() == '217':
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             self.boolf()  # 布尔项
             self.andfun()
         else:
@@ -334,8 +323,10 @@ class Parser:
 
     # 处理布尔因子
     def boolf(self):
+        # self.level=self.level+1
         str = self.getnexttochen()
         if str == '205':  # 处理非运算
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             self.bexpr()  # 处理 ! 之后的布尔表达式
         else:
             self.pos = self.pos - 1
@@ -349,20 +340,28 @@ class Parser:
                 self.regufun()
             else:
                 self.pos = self.pos - 1
+        # self.level=self.level-1
 
     # 调用关系表达式部分
     def regufun(self):
+        self.level = self.level + 1
         self.aexpr()
         str = self.getnexttochen()  # 匹配关系运算符
         if str in ['211', '212', '213', '214', '215', '216']:
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             self.aexpr()
+        self.level = self.level - 1
 
     # 赋值表达式部分~~~~~~~~~~~~~~~~~~~~~~~~
     def qexpr(self):
+        self.grow("赋值表达式")  # 各表达式的逻辑与其他地方有所不同
+        self.level = self.level + 1
         str = self.getnexttochen()
         if str == '700':  # 处理标识符
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             str = self.getnexttochen()
             if str == '219':  # 处理 =
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
                 self.expr()
             else:
                 self.pos = self.pos - 1
@@ -370,13 +369,16 @@ class Parser:
         else:
             self.pos = self.pos - 1
             print("报错，不是赋值表达式")
+        self.level = self.level - 1
 
     # 表达式~~~~~~~~~~~~~~~~~~~~~~~~
     def expr(self):
+        self.level = self.level + 1
         str = self.getnexttochen()
         if str == '205':  # 处理 ！——处理布尔表达式
             self.pos = self.pos - 1
-            self.getnexttochen()  # 匹配#
+            self.getnexttochen()  # 匹配 !
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             self.bexpr()
         else:
             self.pos = self.pos - 1
@@ -384,6 +386,7 @@ class Parser:
             if self.pos == len(self.tochen) - 1:
                 return
             self.exprfun()
+            self.level = self.level - 1
 
     # 调用表达式部分
     def exprfun(self):
@@ -408,11 +411,14 @@ class Parser:
 
     # 声明语句~~~~~~~~~~~~~~~~~~~~~~~~++++++++++++++++++++++++++++++++语句部分++++++++++++++++++++++++++++++++
     def dstat(self):
+        self.level = self.level + 1
         str = self.getnexttochen()
         if str == '105':  # const
+            self.grow("值声明")
             self.pos = self.pos - 1
             self.vdecl()  # 值声明
         elif str == '107':  # void
+            self.grow("函数声明")
             self.pos = self.pos - 1
             self.fdecl()  # 函数声明
         else:
@@ -422,9 +428,11 @@ class Parser:
                     str = self.getnexttochen()
                     if str == '201':  # (
                         self.pos = self.pos - 3
+                        self.grow("函数声明")
                         self.fdecl()  # 函数声明
                     elif str in ['219', '303', '304']:
                         self.pos = self.pos - 3
+                        self.grow("值声明")
                         self.vdecl()  # 值声明
                     else:
                         self.pos = self.pos - 1
@@ -432,392 +440,619 @@ class Parser:
                 else:
                     self.pos = self.pos - 1
                     print("报错，声明语句报错")
-            else:
+            else:  # 不是声明语句
+                self.symss = ['119']
+                s = "不合法的声明语句"
+                while str not in self.symss:
+                    self.geterrors(s)
+                    str = self.getnexttochen()
+
                 self.pos = self.pos - 1
+
+        self.level = self.level - 1
 
     # 值声明
     def vdecl(self):
+        self.level = self.level + 1
         str = self.getnexttochen()
         self.pos = self.pos - 1
         if str == '105':  # 处理 const
+            self.grow("常量声明")
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             self.cdecl()  # 常量声明
         else:
+            self.grow("变量声明")
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             self.vadecl()  # 变量声明
+        self.level = self.level - 1
 
     # 常量声明
     def cdecl(self):
-        str = self.getnexttochen()  # 匹配 const
+        self.level = self.level + 1
+        self.getnexttochen()  # 匹配 const
+        self.grow(self.tochen[self.pos].split(',')[1][:-1])
         str = self.getnexttochen()
         if str in ['101', '102', '103']:  # 匹配常量类型
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             self.cdtable()  # 常量声母表
         else:
             self.pos = self.pos - 1
             print("报错，常量声明错误")
+        self.level = self.level - 1
 
     # 常量声母表
     def cdtable(self):
+        # self.level=self.level+1 此处不需要
         str = self.getnexttochen()
         if str == '700':  # 标识符
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             str = self.getnexttochen()
             if str == '219':  # =
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
                 str = self.getnexttochen()
                 if str in ['101', '102', '103', '400', '500', '600', '800']:  # 常量
+                    self.grow(self.tochen[self.pos].split(',')[1][:-1])
                     str = self.getnexttochen()
                     if str == '303':  # ;
-                        pass
+                        self.grow(self.tochen[self.pos].split(',')[1][:-1])
                     elif str == '304':  # ，
+                        self.grow(self.tochen[self.pos].split(',')[1][:-1])
                         self.cdtable()
-                    else:
-                        self.pos = self.pos - 1
-                        print("报错，常量声明报错")
-                else:
-                    self.pos = self.pos - 1
-                    print("报错，常量声明报错")
-            else:
-                self.pos = self.pos - 1
-                print("报错，常量声明报错")
-        else:
-            self.pos = self.pos - 1
-            print("报错，常量声明报错")
+        #             else:
+        #                 self.pos = self.pos - 1
+        #                 print("报错，常量声明报错")
+        #         else:
+        #             self.pos = self.pos - 1
+        #             print("报错，常量声明报错")
+        #     else:
+        #         self.pos = self.pos - 1
+        #         print("报错，常量声明报错")
+        # else:
+        #     self.pos = self.pos - 1
+        #     print("报错，常量声明报错")
+        # self.level=self.level-1
 
     # 变量声明
     def vadecl(self):
+        self.level = self.level + 1
         str = self.getnexttochen()
         if str in ['101', '102', '103']:  # 匹配变量类型
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             self.vdtable()
+        self.level = self.level - 1
 
     # 变量声明表
     def vdtable(self):
+        # self.level = self.level +  1 此处不需要
         self.udecl()  # 单变量声明
         if self.pos == len(self.tochen) - 1:
             return
         str = self.getnexttochen()
         if str == '303':  # ;
-            pass
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
         elif str == '304':  # ,
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
+            self.level = self.level - 1
             self.vdtable()  # 常量声明表
+            self.level = self.level + 1
+        # self.level = self.level - 1
 
     # 单变量声明
     def udecl(self):
+        # self.level = self.level + 1此处不需要
         str = self.getnexttochen()
         if str == '700':  # 匹配变量
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             str = self.getnexttochen()
             if str == '219':
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
+                self.grow("表达式")
                 self.expr()  # 表达式
             else:
                 self.pos = self.pos - 1
         else:
             self.pos = self.pos - 1
-            print("报错，变量声明报错")
 
     # 函数声明
     def fdecl(self):
+        self.level = self.level + 1
         str = self.getnexttochen()
         if str in ['101', '102', '103', '107']:  # int char float void
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             str = self.getnexttochen()
             if str == '700':  # 标识符
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
                 str = self.getnexttochen()
                 if str == '201':  # （
+                    self.grow(self.tochen[self.pos].split(',')[1][:-1])
+                    self.grow("函数声明形参列表")
                     self.fdplist()
                 str = self.getnexttochen()  # 匹配 )
                 if str == '202':
+                    self.grow(self.tochen[self.pos].split(',')[1][:-1])
                     str = self.getnexttochen()  # 匹配 ;
+                    self.grow(self.tochen[self.pos].split(',')[1][:-1])
                 if str == '303':
-                    pass
+                    self.grow(self.tochen[self.pos].split(',')[1][:-1])
             else:
                 self.pos = self.pos - 1
+            self.level = self.level - 1
 
     # 函数声明形参列表
     def fdplist(self):
+        # self.level = self.level + 1
         str = self.getnexttochen()
         if str in ['101', '102', '103']:  # int float char
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             str = self.getnexttochen()
             if str == '304':
-                self.fdplist()
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
+                self.grow("函数声明形参列表")
+                self.fdplist()  # 函数声明形参列表
         else:
             self.pos = self.pos - 1
+        # self.level = self.level - 1
 
     # 执行语句~~~~~~~~~~~~~~~~~~~~~~~~++++++++++++++++++++++++++++++++
     def estat(self):
+        self.level = self.level + 1
         str = self.getnexttochen()
         if str in ['111', '113', '110', '109', '106']:  # 控制语句
             self.pos = self.pos - 1
+            self.grow("控制语句")
             self.contaolstat()  # 控制语句
         elif str == '301':
             self.pos = self.pos - 1
+            self.grow("复合语句")
             self.compoundstat()  # 复合语句
         elif str == '700':  # 标识符
             if self.getnexttochen() in ['219', '201']:  # = （
                 self.pos = self.pos - 2
+                self.grow("数据处理语句")
                 self.dpstat()  # 数据处理语句
+        self.level = self.level - 1
 
     # 数据处理语句
     def dpstat(self):
-        str = self.getnexttochen()
+        self.level = self.level + 1
+        self.getnexttochen()  # 判读数据处理语句类型
         str = self.getnexttochen()
         if str == '219':  # 赋值语句
             self.pos = self.pos - 2
+            self.grow("赋值表达式")
             self.qexpr()  # 赋值表达式
-            str = self.getnexttochen()  # 处理 ;
+            if self.getnexttochen() == '303':  # 处理 ;
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
+            else:
+                self.pos = self.pos - 1
+                self.geterrors("缺少 ;")
         elif str == '201':  # 函数调用语句
             self.pos = self.pos - 2
+            self.grow("函数调用")
             self.funcall()  # 函数调用
-            str = self.getnexttochen()  # 处理 ;
+            if self.getnexttochen() == '303':  # 处理 ;
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
+            else:
+                self.pos = self.pos - 1
+                self.geterrors("缺少 ;")
+        self.level = self.level - 1
 
-    # 函数调用语句
+    # 函数调用
     def funcall(self):
+        self.level = self.level + 1
         str = self.getnexttochen()
         if str == '700':  # 标识符
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             str = self.getnexttochen()
             if str == '201':  # 处理 （
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
+                self.grow("实参列表")
                 self.funargu()  # 实参列表
-                str = self.getnexttochen()
-                if str != '202':  # 处理 ）
-                    print("报错，缺少 )")
-            else:
-                print("报错，不是合法的函数调用")
-        else:
-            print("报错，不是合法的函数调用")
+                self.getnexttochen()  # 处理 ）
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
+        self.level = self.level - 1
 
     # 函数调用形参
     def funargu(self):
+        # self.level = self.level + 1
+        self.grow("算术表达式")
         self.aexpr()  # 算术表达式
         str = self.getnexttochen()
         if str == '304':  # 处理多个形参
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
+            self.level = self.level - 1  # 使得级别不变
             self.funargu()
+            self.level = self.level + 1
         else:
             self.pos = self.pos - 1
+        # self.level = self.level - 1
 
     # 控制语句
     def contaolstat(self):
+        self.level = self.level + 1
         str = self.getnexttochen()
         self.pos = self.pos - 1
         if str == '111':  # if
+            self.grow("if语句")
             self.ifstat()
         elif str == '113':  # for
+            self.grow("for语句")
             self.forstat()
         elif str == '110':  # while
+            self.grow("while语句")
             self.whilestat()
         elif str == '106':  # return
+            self.grow("return语句")
             self.returnstat()
         elif str == '109':  # dowhile
+            self.grow("dowhile语句")
             self.dowhilestat()
-        else:
-            print("报错，不合法的控制语句")
+        self.level = self.level - 1
 
     # if 语句
     def ifstat(self):
+        self.level = self.level + 1
         self.iffun()
         str = self.getnexttochen()
         if str == '112':  # 处理 else
-            self.stat()
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
+            self.grow("语句")
+            self.stat()  # 语句
         else:
             self.pos = self.pos - 1
+        self.level = self.level - 1
 
     # 调用if语句
     def iffun(self):
+        # self.level = self.level + 1   此处不需要
         str = self.getnexttochen()
         if str == '111':  # 处理 if
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             str = self.getnexttochen()
             if str == '201':  # 处理 （
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
+                self.grow("表达式")
                 self.expr()  # 表达式
                 str = self.getnexttochen()
                 if str == '202':  # 处理 ）
+                    self.grow(self.tochen[self.pos].split(',')[1][:-1])
+                    self.grow("语句")
                     self.stat()  # 语句
+        # self.level = self.level - 1
 
     # for 语句
     def forstat(self):
+        self.level = self.level + 1
         str = self.getnexttochen()
         if str == '113':  # 处理 for
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             if self.getnexttochen() == '201':
-                self.expr()
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
+                self.grow("表达式")
+                self.expr()  # 表达式
                 if self.getnexttochen() == '303':
-                    self.expr()
+                    self.grow(self.tochen[self.pos].split(',')[1][:-1])
+                    self.grow("表达式")
+                    self.expr()  # 表达式
                     if self.getnexttochen() == '303':
-                        self.expr()
+                        self.grow(self.tochen[self.pos].split(',')[1][:-1])
+                        self.grow("表达式")
+                        self.expr()  # 表达式
                         if self.getnexttochen() == '202':  # 处理 ）
+                            self.grow(self.tochen[self.pos].split(',')[1][:-1])
+                            self.grow("循环语句")
                             self.loop()  # 循环语句
+        self.level = self.level - 1
 
     # while 语句
     def whilestat(self):
+        self.level = self.level + 1
         if self.getnexttochen() == '110':  # 处理 while
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             if self.getnexttochen() == '201':  # 处理（
-                self.expr()
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
+                self.grow("表达式")
+                self.expr()  # 表达式
                 if self.getnexttochen() == '202':  # 处理 ）
+                    self.grow(self.tochen[self.pos].split(',')[1][:-1])
+                    self.grow("循环语句")
                     self.loop()  # 循环语句
+        self.level = self.level - 1
 
     # dowhile 语句
     def dowhilestat(self):
+        self.level = self.level + 1
         if self.getnexttochen() == '109':  # 处理 do
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
+            self.grow("循环用复合语句")
             self.loopcomstat()  # 循环用复合语句
             if self.getnexttochen() == '110':  # 处理 while
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
                 if self.getnexttochen() == '201':  # 处理（
-                    self.expr()
+                    self.grow(self.tochen[self.pos].split(',')[1][:-1])
+                    self.grow("表达式")
+                    self.expr()  # 表达式
                     if self.getnexttochen() == '202':  # 处理 ）
+                        self.grow(self.tochen[self.pos].split(',')[1][:-1])
                         if self.getnexttochen() == '303':  # 处理 ;
-                            pass
+                            self.grow(self.tochen[self.pos].split(',')[1][:-1])
+        self.level = self.level - 1
 
     # 循环执行语句
     def loopestat(self):
+        self.level = self.level + 1
         str = self.getnexttochen()
         self.pos = self.pos - 1
         if str == '111':  # if
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
+            self.grow("循环if语句")
             self.loopif()  # 循环用if语句
         elif str == '113':  # for
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
+            self.grow("循环for语句")
             self.forstat()
         elif str == '110':  # while
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
+            self.grow("循环while语句")
             self.whilestat()
         elif str == '106':  # return
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
+            self.grow("return语句")
             self.returnstat()
         elif str == '109':  # dowhile
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
+            self.grow("dowhile语句")
             self.dowhilestat()
         elif str == '104':  # break
-            str = self.getnexttochen()  # ;
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
+            self.grow("循环if语句")
+            self.breakstat()
         elif str == '108':  # contiue
-            str = self.getnexttochen()  # ;
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
+            self.grow("continue语句")
+            self.contiuestat()
+        self.level = self.level - 1
+
+    # break语句
+    def breakstat(self):
+        self.level = self.level + 1
+        if self.getnexttochen() == '108':  # 处理 break
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
+            self.getnexttochen()  # 处理 ;
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
+        self.level = self.level - 1
+
+    # contiue语句
+    def contiuestat(self):
+        self.level = self.level + 1
+        if self.getnexttochen() == '108':  # 处理 contiue
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
+            self.getnexttochen()  # 处理 ;
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
+        self.level = self.level - 1
 
     # 循环用if语句
     def loopif(self):
-        self.iffun()
+        self.level = self.level + 1
+        self.grow("循环if语句")
+        self.iffun()  # 循环if语句
         str = self.getnexttochen()
         if str == '112':  # 处理 else
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
+            self.grow("循环语句")
             self.loop()  # 循环语句
         else:
             self.pos = self.pos - 1
+        self.level = self.level - 1
 
     # 调用循环if语句
     def loopiffun(self):
+        self.level = self.level + 1
         if self.getnexttochen() == '111':  # 处理 if
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             if self.getnexttochen() == '201':  # 处理 （
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
+                self.grow("表达式")
                 self.expr()  # 表达式
                 str = self.getnexttochen()
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
                 if str == '202':  # 处理 ）
+                    self.grow("循环语句")
                     self.loop()  # 循环语句
+        self.level = self.level - 1
 
     # 循环语句
     def loop(self):
+        self.level = self.level + 1
         str = self.getnexttochen()
         if str in ['105', '101', '102', '103', '107']:
             self.pos = self.pos - 1
+            self.grow("声明语句")
             self.dstat()  # 声明语句
         elif str in ['111', '113', '110', '106', '109', '104', '108']:
             self.pos = self.pos - 1
+            self.grow("循环执行语句")
             self.loopestat()  # 循环执行语句
         elif str == '301':  # 处理 {
             self.pos = self.pos - 1
+            self.grow("循环用复合语句")
             self.loopcomstat()  # 循环用复合语句
         elif str == '700':
             self.pos = self.pos - 1
-            self.dpstat()
+            self.grow("数据处理语句")
+            self.dpstat()  # 数据处理语句
         else:
             self.pos = self.pos - 1
+        self.level = self.level - 1
 
     # 循环用复合语句
     def loopcomstat(self):
-        if self.getnexttochen() == '301':
+        self.level = self.level + 1
+        if self.getnexttochen() == '301':  # 处理 {
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
+            self.grow("循环语句表")
             self.loopstattable()  # 循环语句表
-            if self.getnexttochen() == '302':
-                pass
+            if self.getnexttochen() == '302':  # 处理 }
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
+        self.level = self.level - 1
 
     # 循环语句表
     def loopstattable(self):
+        self.level = self.level + 1
+        self.grow("循环语句")
         self.loop()  # 循环语句
         if self.getnexttochen() != '302':
             self.pos = self.pos - 1
+            self.grow("循环语句表")
             self.loopstattable()  # 循环语句表
         else:
             self.pos = self.pos - 1
+        self.level = self.level - 1
 
     # return 语句
     def returnstat(self):
+        self.level = self.level + 1
         str = self.getnexttochen()
+        self.grow(self.tochen[self.pos].split(',')[1][:-1])
         if str == '106':
             str = self.getnexttochen()
-            if str != '303':
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
+            if str != '303':  # 处理 ;
                 self.pos = self.pos - 1
+                self.grow("表达式")
                 self.expr()
-                str = self.getnexttochen()
+                self.getnexttochen()  # 处理 ;
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
+        self.level = self.level - 1
 
     # 复合语句
     def compoundstat(self):
+        self.level = self.level + 1
         str = self.getnexttochen()
+        self.grow(self.tochen[self.pos].split(',')[1][:-1])
         if str == '301':  # 处理 {
+            self.grow("语句表")
             self.stable()  # 语句表
             str = self.getnexttochen()  # 匹配 }
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             if str != '302':
                 print("报错，不合法的复合语句，缺少 }")
+        self.level = self.level - 1
 
     # 语句表
     def stable(self):
+        self.level = self.level + 1
+        self.grow("语句")
         self.stat()
         str = self.getnexttochen()
         if str in ['105', '101', '102', '103', '107', '111', '113', '110', '109', '106',
-                   '301']:  # 声明语句、控制语句和符合语句
+                   '301']:  # 声明语句、控制语句和复合语句
             self.pos = self.pos - 1
+            self.grow("语句表")
             self.stable()
         elif str == '700':  # 标识符
             if self.getnexttochen() in ['219', '201']:  # = （
                 self.pos = self.pos - 2
+                self.grow("语句表")
                 self.stable()
         elif str == '302':  # }
             self.pos = self.pos - 1
+        self.level = self.level - 1
 
     # 语句
     def stat(self):
+        self.level = self.level + 1
         str = self.getnexttochen()
         if str in ['105', '101', '102', '103', '107']:  # 声明语句
+            self.grow("声明语句")
             self.pos = self.pos - 1
             self.dstat()
         elif str in ['111', '113', '110', '109', '106', '301']:  # 控制语句和复合语句
             self.pos = self.pos - 1
+            self.grow("声明语句")
             self.estat()  # 执行语句
         elif str == '700':  # 标识符
             if self.getnexttochen() in ['219', '201']:  # = （
                 self.pos = self.pos - 2
+                self.grow("声明语句")
                 self.estat()  # 执行语句
+        self.level = self.level - 1
 
     # 函数定义~~~~~~~~~~~~~~~~~~~~~~~~++++++++++++++++++++++++++++++++函数部分++++++++++++++++++++++++++++++++
     def fundef(self):
+        self.level = self.level + 1
         str = self.getnexttochen()
+        self.grow(self.tochen[self.pos].split(',')[1][:-1])
         if str in ['101', '102', '103', '107']:  # 函数类型
             if self.getnexttochen() == '700':  # 标识符
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
                 if self.getnexttochen() == '201':  # 处理 (
+                    self.grow(self.tochen[self.pos].split(',')[1][:-1])
                     if self.getnexttochen() in ['101', '102', '103']:  # 函数变量
+                        self.grow(self.tochen[self.pos].split(',')[1][:-1])
                         self.pos = self.pos - 1
+                        self.grow("函数形参")
                         self.fundp()  # 函数定义形参
                 if self.getnexttochen() == '202':  # 匹配 ）
-                    self.compoundstat()  # 符合语句
+                    self.grow(self.tochen[self.pos].split(',')[1][:-1])
+                    self.grow("复合语句")
+                    self.compoundstat()  # 复合语句
+        self.level = self.level - 1
 
     # 函数定义形参
     def fundp(self):
+        # self.level = self.level + 1
         if self.getnexttochen() in ['101', '102', '103']:  # 函数变量
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             if self.getnexttochen() == '700':  # 标识符
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
                 if self.getnexttochen() == '304':  # 匹配 ,
+                    self.grow(self.tochen[self.pos].split(',')[1][:-1])
                     self.fundp()  # 函数定义形参
                 else:
                     self.pos = self.pos - 1
+        # self.level = self.level - 1
 
     # 程序~~~~~~~~~~~~~~~~~~~~~~~~++++++++++++++++++++++++++++++++程序部分++++++++++++++++++++++++++++++++
     def pro(self):
+        self.level = self.level + 1
+        self.grow("声明语句")
         self.dstat()  # 声明语句
         str = self.getnexttochen()
         if str == '119':  # 匹配 main
+            self.grow(self.tochen[self.pos].split(',')[1][:-1])
             if self.getnexttochen() == '201':  # 匹配 (
+                self.grow(self.tochen[self.pos].split(',')[1][:-1])
                 if self.getnexttochen() == '202':  # 匹配 )
+                    self.grow(self.tochen[self.pos].split(',')[1][:-1])
+                    self.grow("复合语句")
                     self.compoundstat()  # 复合语句
+                    self.grow("函数块")
                     self.funblock()
         else:
+            self.level = self.level - 1
             self.pos = self.pos - 1
             self.pro()
+        self.level = self.level - 1
 
     # 函数快
     def funblock(self):
-        if self.getnexttochen() in ['101', '102', '103', '107']:  # 函数类型
+        self.level = self.level + 1
+        str = self.getnexttochen()
+        if str in ['101', '102', '103', '107']:  # 函数类型
             self.pos = self.pos - 1
+            self.grow("函数定义")
             self.fundef()  # 函数定义
+            self.grow("函数块")
             self.funblock()  # 函数块
         else:
+            # self.symss = ['101', '102', '103', '107']
+            # s = "不合法的函数快"
+            # while str not in self.symss:
+            #     self.geterrors(s)
+            #     str = self.getnexttochen()
             self.pos = self.pos - 1
+        self.level = self.level - 1
 
 
 def ll1():
@@ -831,6 +1066,7 @@ def fun():
     parser.pro()
     if parser.pos == len(parser.tochen) - 1:
         print("正确程序")
+        print(parser.syntaxTree)
     else:
         print("错误程序")
 

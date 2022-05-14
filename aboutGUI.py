@@ -14,9 +14,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_about(object):
     def setupUi(self, about):
         about.setObjectName("about")
-        about.resize(400, 300)
+        about.resize(610, 410)
         self.textEdit = QtWidgets.QTextEdit(about)
-        self.textEdit.setGeometry(QtCore.QRect(0, 0, 401, 301))
+        self.textEdit.setGeometry(QtCore.QRect(10, 10, 591, 391))
         self.textEdit.setObjectName("textEdit")
 
         self.retranslateUi(about)
