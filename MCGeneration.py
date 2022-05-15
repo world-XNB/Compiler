@@ -4,7 +4,7 @@
 # @File : MCGeneration.py
 # @Software: PyCharm
 
-# 中间代码生成器的实现类（包含语义分析-符号表的建立、静态语义检查）
+# 中间代码生成器的实现类（包含语义分析-符号表的建立、静态语义检查）-------L-属性文法的自上而下的翻译
 class MCG:
     def __init__(self):
         self.tochen = ['(105,const)', '(102,int)', '(700,a_global)', '(219,=)', '(102,2)', '(303,;)', '(105,const)',
@@ -17,13 +17,24 @@ class MCG:
                        '(219,=)', '(102,2)', '(303,;)', '(106,return)', '(102,1)', '(303,;)', '(302,})']
 
         self.pos = -1  # 记录访问tochen的位置
-        self.varTable = []  # 变量表
         self.constTbale = []  # 常量表
+        self.varTable = []  # 变量表
+
         self.funTable = []  # 函数表
         self.scopePath = 0  # 作用域路径
-        # self.strTable = []  # 字符串常量表
 
-    # 符号表插入操作
+    # 将常量插入常量表
+    # def InsertConst(self, id):
+    #     dir = {}
+    #     for con in self.constTbale:
+    #         if con["name"] == id:
+    #             print("语义错误，常量" + id + "的重复声明")
+    #             return
+    #         dir["entry"] = len(self.constTbale) + 1  # 记录入口
+    #         dir["name"] = id
+    #         self.constTbale.append(dir)
+
+    # # 符号表插入操作
     def insert(self, L, D):
         for l in L:
             if l["name"] == D["name"]:
