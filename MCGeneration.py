@@ -8,15 +8,21 @@
 # 中间代码生成器的实现类（包含语义分析-符号表的建立、静态语义检查）-------L-属性文法的自上而下的翻译
 class MCG:
     def __init__(self):
-        self.tochen = ['(119,main)', '(201,()', '(202,))', '(301,{)', '(102,int)', '(700,i)', '(304,,)', '(700,factor)',
-                       '(304,,)', '(700,n)', '(303,;)', '(700,i)', '(219,=)', '(102,"0")', '(303,;)', '(700,n)',
-                       '(219,=)', '(700,read)', '(201,()', '(202,))', '(303,;)', '(111,if)', '(201,()', '(700,n)',
-                       '(211,<)', '(102,1)', '(202,))', '(301,{)', '(700,factor)', '(219,=)', '(102,"0")', '(303,;)',
-                       '(302,})', '(112,else)', '(301,{)', '(700,factor)', '(219,=)', '(102,1)', '(303,;)', '(302,})',
-                       '(110,while)', '(201,()', '(700,i)', '(211,<)', '(700,n)', '(202,))', '(301,{)', '(700,i)',
-                       '(219,=)', '(700,i)', '(209,+)', '(102,1)', '(303,;)', '(700,factor)', '(219,=)', '(700,factor)',
-                       '(206,*)', '(700,i)', '(303,;)', '(302,})', '(700,write)', '(201,()', '(700,factor)', '(202,))',
-                       '(303,;)', '(302,})']
+        self.tochen = ['(102,int)', '(700,a)', '(219,=)', '(102,1)', '(303,;)', '(102,int)', '(700,sum)', '(201,()',
+                       '(102,int)', '(304,,)', '(102,int)', '(202,))', '(303,;)', '(102,int)', '(700,max)', '(201,()',
+                       '(102,int)', '(304,,)', '(102,int)', '(202,))', '(303,;)', '(119,main)', '(201,()', '(202,))',
+                       '(301,{)', '(102,int)', '(700,N)', '(219,=)', '(700,read)', '(201,()', '(202,))', '(303,;)',
+                       '(102,int)', '(700,M)', '(219,=)', '(700,read)', '(201,()', '(202,))', '(303,;)', '(700,a)',
+                       '(219,=)', '(700,sum)', '(201,()', '(700,max)', '(201,()', '(700,M)', '(304,,)', '(700,N)',
+                       '(202,))', '(304,,)', '(102,100)', '(202,))', '(303,;)', '(700,write)', '(201,()', '(700,a)',
+                       '(202,))', '(303,;)', '(302,})', '(102,int)', '(700,sum)', '(201,()', '(102,int)', '(700,sum_x)',
+                       '(304,,)', '(102,int)', '(700,sum_y)', '(202,))', '(301,{)', '(102,int)', '(700,result)',
+                       '(303,;)', '(700,result)', '(219,=)', '(700,sum_x)', '(209,+)', '(700,sum_y)', '(303,;)',
+                       '(106,return)', '(700,result)', '(303,;)', '(302,})', '(102,int)', '(700,max)', '(201,()',
+                       '(102,int)', '(700,m_x)', '(304,,)', '(102,int)', '(700,m_y)', '(202,))', '(301,{)', '(102,int)',
+                       '(700,result)', '(303,;)', '(111,if)', '(201,()', '(700,m_x)', '(214,>=)', '(700,m_y)',
+                       '(202,))', '(700,result)', '(219,=)', '(700,m_x)', '(303,;)', '(112,else)', '(700,result)',
+                       '(219,=)', '(700,m_y)', '(303,;)', '(106,return)', '(700,result)', '(303,;)', '(302,})']
 
         self.pos = -1  # 记录访问tochen的位置
         self.constTbale = []  # 常量表
@@ -28,6 +34,8 @@ class MCG:
         self.T = 0  # 用来辅助产生临时变量
         self.Tvar = locals()  # locals以字典的形式返回当前函数运行环境下的所有局部变量
         self.ICT = []  # 中间代码表
+
+        self.flagvar = 1  # 标志量，辅助多个声明变量的翻译
 
     # 回填函数
     def backpatch(self, p, t):
@@ -213,22 +221,22 @@ class MCG:
             Str = self.getnexttochen()
             if Str in ['211', '212', '213', '214', '215', '216']:  # 关系表达式
                 self.pos = midpos
-                reg = self.regufun()
+                reg = self.regufun(aex)
                 return reg
             else:
                 self.pos = self.pos - 1
                 return aex
 
     # 调用关系表达式部分
-    def regufun(self):
-        aex1 = self.aexpr()
+    def regufun(self, aex):
+        # aex1 = self.aexpr()
         Str = self.getnexttochen()  # 匹配关系运算符
         if Str in ['211', '212', '213', '214', '215', '216']:
             word = self.getnextword()
 
             aex2 = self.aexpr()
             self.newtemp()
-            self.gencode(word, aex1, aex2, 'T' + str(self.T - 1))
+            self.gencode(word, aex, aex2, 'T' + str(self.T - 1))
             return 'T' + str(self.T - 1)
 
     # 赋值表达式部分~~~~~~~~~~~~~~~~~~~~~~~~
@@ -276,9 +284,9 @@ class MCG:
             self.pos = self.pos - 2
             self.qexpr()
         elif str in ['211', '212', '213', '214', '215', '216']:  # 处理关系运算符（关系表达式）
-            self.pos = self.pos - 2
+            self.pos = self.pos - 1
             midpos = self.pos
-            reg = self.regufun()
+            reg = self.regufun(aex)
             if self.getnexttochen() in ['217', '218']:  # 处理 && ||
                 self.pos = midpos
                 bex = self.bexpr()
@@ -565,12 +573,10 @@ class MCG:
 
                     p1 = []  # 真出口回填链
                     p2 = []  # 假出口回填链就
-                    if exp == 1:
-                        self.gencode('jnz', exp, ' ', "AGAIN")  # 需要回填
-                        self.merge(p1, self.ICT[self.NXQ - 1])
-                    else:
-                        self.gencode('jz', exp, ' ', "NXQ")
-                        self.merge(p2, self.ICT[self.NXQ - 1])
+                    self.gencode('jnz', exp, ' ', "AGAIN")  # 需要回填
+                    self.merge(p1, self.ICT[self.NXQ - 1])
+                    self.gencode('jz', exp, ' ', "NXQ")
+                    self.merge(p2, self.ICT[self.NXQ - 1])
 
                     if self.getnexttochen() == '303':
                         INC = self.NXQ  # 表达式的入口代码
@@ -762,6 +768,8 @@ class MCG:
         if str in ['101', '102', '103', '107']:  # 函数类型
             Str = self.getnexttochen()
             if Str == '700':  # 标识符
+                # self.pos = self.pos - 1
+                Str = self.getnextword()
                 self.gencode(Str, ' ', ' ', ' ')
                 if self.getnexttochen() == '201':  # 处理 (
                     if self.getnexttochen() in ['101', '102', '103']:  # 函数变量
@@ -781,7 +789,9 @@ class MCG:
 
     # 程序~~~~~~~~~~~~~~~~~~~~~~~~++++++++++++++++++++++++++++++++程序部分++++++++++++++++++++++++++++++++
     def pro(self):
-        self.gencode("main", ' ', ' ', ' ')
+        if self.flagvar == 1:
+            self.gencode("main", ' ', ' ', ' ')
+            self.flagvar = 0
         self.dstat()  # 声明语句
         Str = self.getnexttochen()
         if Str == '119':  # 匹配 main

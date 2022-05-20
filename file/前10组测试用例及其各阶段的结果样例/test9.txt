@@ -25,7 +25,7 @@ int factor(int m) {
        fa=m*factor(m-1);
        }
 
-    }  
+    //}  
 
 
 

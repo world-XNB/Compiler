@@ -11,6 +11,6 @@ main()
 	sum = sum+i;
     }
 
-  //write(sum);
+  write(sum);
 
 }
