@@ -2,17 +2,12 @@
 	/*
 	多行注释
 	*/
-	const int a_global = 2;
-	const int b_global = 3;
-	int fun1();
-	int fun2(int,int);
-	int fun3(int,float);
-	int a=1;
-
+	const int x=1;
+	int fun(int,int);
 	main()
 	{
 	    int a=2;
-	    int b=3;
-	    int a=2;
-	    return 1;
+	    int b,c,d,e;
+	    b=2+3%1;
+	    e=2*1+4/1;
 	}

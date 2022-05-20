@@ -7,6 +7,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 
 from Compiler.LL1GUI import Ui_LL1
+from Compiler.MCGeneration import MCG
 from Compiler.aboutGUI import Ui_about
 from Compiler.Parser import Parser, LL1
 from Compiler.helpGUI import Ui_help
@@ -45,8 +46,8 @@ class PerGUI(Ui_MainWindow, QMainWindow):
         fname = QFileDialog.getOpenFileName(self, "open file", '.')
         self.Apath = fname[0]  # 记录绝对路径，后面保存要用
         if fname[0]:
-            f = open(self.Apath, 'r', encoding='utf-8')
-            # f = open(self.Apath, 'r')
+            # f = open(self.Apath, 'r', encoding='utf-8')
+            f = open(self.Apath, 'r')
             with f:
                 self.data = f.readlines()
                 self.strdata = ''
@@ -82,7 +83,9 @@ class PerGUI(Ui_MainWindow, QMainWindow):
         lex.lexfun()
         self.tochen = lex.tochen
         self.rows = lex.rows
+        print("tochen串如下：")
         print(self.tochen)
+        print("tochen串对应的行列关系如下：")
         print(self.rows)
         text1 = '\t\t\ttochen串\n'
         text2 = '\t\t\t编译结果\n'
@@ -126,8 +129,24 @@ class PerGUI(Ui_MainWindow, QMainWindow):
 
     # 中间代码
     def M(self):
-        self.textEdit.setText(self.strdata)
-        self.textEdit_2.setText(self.strdata)
+        mcg = MCG()
+        mcg.tochen = self.tochen
+        mcg.pro()
+        print("中间代码生成：")
+        print("常量表：" + str(mcg.constTbale))
+        print("函数表：" + str(mcg.funTable))
+        print("变量表：" + str(mcg.varTable))
+        ict = ""
+        for i in mcg.ICT:
+            ict += '(' + str(i["number"]) + ',' + str(i["op"]) + ',' + str(i["arg1"]) + ',' + str(
+                i["arg2"]) + ',' + str(i["result"]) + ')' '\n'
+        for i in mcg.ICT:
+            print(i)
+        if mcg.pos == len(mcg.tochen) - 1:
+            self.textEdit.setText(ict)
+            self.textEdit_2.setText("中间代码如上")
+        else:
+            print("错误程序")
 
     # 目标代码
     def O(self):
