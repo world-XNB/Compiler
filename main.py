@@ -9,16 +9,16 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from Compiler.LL1GUI import Ui_LL1
 from Compiler.MCGeneration import MCG
 from Compiler.aboutGUI import Ui_about
-from Compiler.Parser import Parser, LL1
+from Compiler.Parser import Parser
 from Compiler.helpGUI import Ui_help
 from Compiler.mainGUI import Ui_MainWindow
 from Compiler.Lex import Lex, dfaGUI
 
 
 # 继承主界面
-class PerGUI(Ui_MainWindow, QMainWindow):
-    def __init__(self):
-        super(PerGUI, self).__init__()
+class PerGUI(QMainWindow, Ui_MainWindow):
+    def __init__(self, parent=None):
+        super(PerGUI, self).__init__(parent)
         self.setupUi(self)
         # 打开文件的内容
         self.data = None
@@ -136,12 +136,13 @@ class PerGUI(Ui_MainWindow, QMainWindow):
         print("常量表：" + str(mcg.constTbale))
         print("函数表：" + str(mcg.funTable))
         print("变量表：" + str(mcg.varTable))
+        print("中间代码表：" + str(mcg.ICT))
         ict = ""
         for i in mcg.ICT:
             ict += '(' + str(i["number"]) + ',' + str(i["op"]) + ',' + str(i["arg1"]) + ',' + str(
                 i["arg2"]) + ',' + str(i["result"]) + ')' '\n'
-        for i in mcg.ICT:
-            print(i)
+        # for i in mcg.ICT:
+        #     print(i)
         if mcg.pos == len(mcg.tochen) - 1:
             self.textEdit.setText(ict)
             self.textEdit_2.setText("中间代码如上")
@@ -149,9 +150,11 @@ class PerGUI(Ui_MainWindow, QMainWindow):
             print("错误程序")
 
     # 目标代码
-    def O(self):
-        self.textEdit.setText(self.strdata)
-        self.textEdit_2.setText(self.strdata)
+    # def O(self):
+    #     ocg = OCG()
+    #     # ocg.target()
+    #     self.textEdit.setText(self.strdata)
+    #     self.textEdit_2.setText(self.strdata)
 
     # 帮助
     def H(self):

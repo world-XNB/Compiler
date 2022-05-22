@@ -303,11 +303,11 @@ class MCG:
             return aex
 
     # 声明语句~~~~~~~~~~~~~~~~~~~~~~~~++++++++++++++++++++++++++++++++语句部分++++++++++++++++++++++++++++++++
-    def dstat(self):
+    def dstat(self, funName="name"):
         str = self.getnexttochen()
         if str == '105':  # const
             self.pos = self.pos - 1
-            self.vdecl()  # 值声明
+            self.vdecl(funName)  # 值声明
         elif str == '107':  # void
             self.pos = self.pos - 1
             self.fdecl()  # 函数声明
@@ -321,7 +321,7 @@ class MCG:
                         self.fdecl()  # 函数声明
                     elif str in ['219', '303', '304']:
                         self.pos = self.pos - 3
-                        self.vdecl()  # 值声明
+                        self.vdecl(funName)  # 值声明
                     else:
                         self.pos = self.pos - 1
                         print("报错，声明语句报错")
@@ -332,23 +332,23 @@ class MCG:
                 self.pos = self.pos - 1
 
     # 值声明
-    def vdecl(self):
+    def vdecl(self, sp="name"):
         str = self.getnexttochen()
         self.pos = self.pos - 1
         if str == '105':  # 处理 const
-            self.cdecl()  # 常量声明
+            self.cdecl(sp)  # 常量声明
         else:
-            self.vadecl()  # 变量声明
+            self.vadecl(sp)  # 变量声明
 
     # 常量声明
-    def cdecl(self):
+    def cdecl(self, sp="name"):
         self.getnexttochen()  # 匹配 const
         str = self.getnexttochen()
         if str in ['101', '102', '103']:  # 匹配常量类型
 
             constdir = {}
             constdir["type"] = self.getnextword()  # 记录常量类型
-
+            constdir["fName"] = sp
             self.cdtable(constdir)  # 常量声明表
         else:
             self.pos = self.pos - 1
@@ -378,12 +378,13 @@ class MCG:
                         self.cdtable(constdir)
 
     # 变量声明
-    def vadecl(self):
+    def vadecl(self, sp="name"):
         str = self.getnexttochen()
         if str in ['101', '102', '103']:  # 匹配变量类型
             vardir = {}
             vardir["SP"] = self.scopePath
             vardir["type"] = self.getnextword()
+            vardir["fName"] = sp
             self.vdtable(vardir)
 
     # 变量声明表
@@ -543,8 +544,13 @@ class MCG:
         exp = self.iffun()
         str = self.getnexttochen()
         if str == '112':  # 处理 else
-            self.gencode('jz', exp, ' ', self.NXQ + 1)
+            p1 = []
+            self.gencode('j', ' ', ' ', self.NXQ + 1)
+            self.merge(p1, self.ICT[self.NXQ - 1])
+
             self.stat()  # 语句
+            self.backpatch(p1, self.NXQ)
+
         else:
             self.pos = self.pos - 1
 
@@ -557,8 +563,14 @@ class MCG:
                 exp = self.expr()  # 表达式
                 Str = self.getnexttochen()
                 if Str == '202':  # 处理 ）
-                    self.gencode('jnz', exp, ' ', self.NXQ + 1)
+                    # self.gencode('jnz', exp, ' ', self.NXQ + 1)
+                    p1 = []
+                    self.gencode('jz', exp, ' ', "else")
+                    self.merge(p1, self.ICT[self.NXQ - 1])
+
                     self.stat()  # 语句
+
+                    self.backpatch(p1, self.NXQ)
                 return exp
 
     # for 语句
@@ -723,19 +735,19 @@ class MCG:
                 self.getnexttochen()  # 处理 ;
 
     # 复合语句
-    def compoundstat(self):
+    def compoundstat(self, sp="main"):
         self.scopePath = self.scopePath + 1
         str = self.getnexttochen()
         if str == '301':  # 处理 {
-            self.stable()  # 语句表
+            self.stable(sp)  # 语句表
             str = self.getnexttochen()  # 匹配 }
             if str != '302':
                 print("报错，不合法的复合语句，缺少 }")
         self.scopePath = self.scopePath - 1
 
     # 语句表
-    def stable(self):
-        self.stat()
+    def stable(self, sp="name"):
+        self.stat(sp)
         str = self.getnexttochen()
         if str in ['105', '101', '102', '103', '107', '111', '113', '110', '109', '106',
                    '301']:  # 声明语句、控制语句和复合语句
@@ -749,11 +761,11 @@ class MCG:
             self.pos = self.pos - 1
 
     # 语句
-    def stat(self):
+    def stat(self, sp="name"):
         str = self.getnexttochen()
         if str in ['105', '101', '102', '103', '107']:  # 声明语句
             self.pos = self.pos - 1
-            self.dstat()
+            self.dstat(sp)
         elif str in ['111', '113', '110', '109', '106', '301']:  # 控制语句和复合语句
             self.pos = self.pos - 1
             self.estat()  # 执行语句
@@ -776,7 +788,7 @@ class MCG:
                         self.pos = self.pos - 1
                         self.fundp()  # 函数定义形参
                 if self.getnexttochen() == '202':  # 匹配 ）
-                    self.compoundstat()  # 复合语句
+                    self.compoundstat(Str)  # 复合语句
 
     # 函数定义形参
     def fundp(self):
@@ -792,12 +804,12 @@ class MCG:
         if self.flagvar == 1:
             self.gencode("main", ' ', ' ', ' ')
             self.flagvar = 0
-        self.dstat()  # 声明语句
+        self.dstat("global")  # 声明语句
         Str = self.getnexttochen()
         if Str == '119':  # 匹配 main
             if self.getnexttochen() == '201':  # 匹配 (
                 if self.getnexttochen() == '202':  # 匹配 )
-                    self.compoundstat()  # 复合语句
+                    self.compoundstat("main")  # 复合语句
                     self.gencode("sys", ' ', ' ', ' ')
                     self.funblock()
         else:
@@ -820,8 +832,9 @@ def fun():
     print("常量表：" + str(mcg.constTbale))
     print("函数表：" + str(mcg.funTable))
     print("变量表：" + str(mcg.varTable))
-    for i in mcg.ICT:
-        print(i)
+    print(mcg.ICT)
+    # for i in mcg.ICT:
+    #     print(i)
     if mcg.pos == len(mcg.tochen) - 1:
         print("正确程序")
     else:
