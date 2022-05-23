@@ -222,5 +222,143 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>LL1</receiver>
+   <slot>open()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>59</x>
+     <y>26</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>499</x>
+     <y>399</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>LL1</receiver>
+   <slot>save()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>159</x>
+     <y>26</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>499</x>
+     <y>399</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>LL1</receiver>
+   <slot>confirm()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>259</x>
+     <y>26</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>499</x>
+     <y>399</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_6</sender>
+   <signal>clicked()</signal>
+   <receiver>LL1</receiver>
+   <slot>FATable()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>939</x>
+     <y>214</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>499</x>
+     <y>399</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>LL1</receiver>
+   <slot>askFirst()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>558</x>
+     <y>489</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>499</x>
+     <y>399</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_5</sender>
+   <signal>clicked()</signal>
+   <receiver>LL1</receiver>
+   <slot>askFollow()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>558</x>
+     <y>690</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>499</x>
+     <y>399</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_8</sender>
+   <signal>clicked()</signal>
+   <receiver>LL1</receiver>
+   <slot>OS()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>708</x>
+     <y>434</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>499</x>
+     <y>399</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_7</sender>
+   <signal>clicked()</signal>
+   <receiver>LL1</receiver>
+   <slot>MS()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>896</x>
+     <y>434</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>499</x>
+     <y>399</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>open()</slot>
+  <slot>save()</slot>
+  <slot>confirm()</slot>
+  <slot>askFirst()</slot>
+  <slot>askFollow()</slot>
+  <slot>FATable()</slot>
+  <slot>OS()</slot>
+  <slot>MS()</slot>
+ </slots>
 </ui>

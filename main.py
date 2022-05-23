@@ -8,8 +8,9 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 
 from Compiler.LL1GUI import Ui_LL1
 from Compiler.MCGeneration import MCG
+from Compiler.OCGeneration import OCG
 from Compiler.aboutGUI import Ui_about
-from Compiler.Parser import Parser
+from Compiler.Parser import Parser, LL1
 from Compiler.helpGUI import Ui_help
 from Compiler.mainGUI import Ui_MainWindow
 from Compiler.Lex import Lex, dfaGUI
@@ -34,6 +35,14 @@ class PerGUI(QMainWindow, Ui_MainWindow):
         self.rows = {}
         # 语法树
         self.treeData = ""
+        # 常量表
+        self.constTbale = []
+        # 函数表
+        self.funTable = []
+        # 变量表
+        self.varTable = []
+        # 中间代码表
+        self.ICT = []
 
     # 新建
     def new(self):
@@ -132,6 +141,10 @@ class PerGUI(QMainWindow, Ui_MainWindow):
         mcg = MCG()
         mcg.tochen = self.tochen
         mcg.pro()
+        self.constTbale = mcg.constTbale
+        self.varTable = mcg.varTable
+        self.funTable = mcg.funTable
+        self.ICT = mcg.ICT
         print("中间代码生成：")
         print("常量表：" + str(mcg.constTbale))
         print("函数表：" + str(mcg.funTable))
@@ -150,11 +163,30 @@ class PerGUI(QMainWindow, Ui_MainWindow):
             print("错误程序")
 
     # 目标代码
-    # def O(self):
-    #     ocg = OCG()
-    #     # ocg.target()
-    #     self.textEdit.setText(self.strdata)
-    #     self.textEdit_2.setText(self.strdata)
+    def O(self):
+        ocg = OCG()
+        ocg.constTbale = self.constTbale
+        ocg.varTable = self.varTable
+        ocg.funTable = self.funTable
+        ocg.MCG = self.ICT
+        print("常量表：" + str(ocg.constTbale))
+        print("函数表：" + str(ocg.funTable))
+        print("变量表：" + str(ocg.varTable))
+        print("中间代码表：" + str(ocg.MCG))
+        ocg.ASMinint()
+        ocg.target()
+        ocg.ASMend()
+
+        print(ocg.ASM)
+        asm = ""
+        for i in ocg.ASM:
+            if i[0] != '_':
+                asm += "\t" + i + "\n"
+            else:
+                asm += i + "\n"
+
+        self.textEdit.setText(asm)
+        self.textEdit_2.setText("目标代码如上")
 
     # 帮助
     def H(self):
@@ -191,6 +223,72 @@ class LL1GUI(Ui_LL1, QMainWindow):
     def __init__(self):
         super(LL1GUI, self).__init__()
         self.setupUi(self)
+        self.ll1 = LL1()
+        self.count = 0  # 辅助单步显示
+
+    def open(self):
+        gra = self.ll1.openfile()
+        temp = ""
+        for i in gra:
+            temp += i
+        self.textEdit.setText(temp)
+
+    def save(self):
+        result = self.textEdit.toPlainText()
+        filename = QFileDialog.getSaveFileName(self, 'save file')
+        with open(filename[0], 'w', encoding='utf-8') as f:
+            f.write(result)
+
+    def confirm(self):
+        self.ll1.judge()
+        self.lineEdit.setText(str(self.ll1.judge()))
+
+    def FATable(self):
+        self.ll1.FATable()
+        f = ""
+        for fat in self.ll1.FAT.keys():
+            f += str(fat) + " " + str(self.ll1.FAT[fat]) + '\n'
+        self.textEdit_4.setText(f)
+
+    def askFirst(self):
+        temp = ""
+        for key in self.ll1.grammer.keys():
+            temp += key + str(self.ll1.First(key)) + '\n'
+        self.textEdit_2.setText(temp)
+
+    def askFollow(self):
+        temp = ""
+        for key in self.ll1.grammer.keys():
+            temp += key + str(self.ll1.Follow(key)) + '\n'
+        self.textEdit_3.setText(temp)
+
+    def OS(self):
+        print("单步显示")
+        # self.ll1.Input = self.lineEdit_2.text()
+        self.ll1.FA()
+        print(self.ll1.process)
+        pos = 1
+        self.count = self.count + 1
+        t1 = "步骤  分析栈  剩余字符串  推导所用产生式或匹配\n"
+        for i in self.ll1.process:
+            if self.count >= len(self.ll1.process) + 2:
+                self.count = 0
+            if pos >= self.count:
+                break
+            else:
+                t1 += str(i["步骤"]) + "  " + str(i["分析栈"]) + "  " + str(i["剩余字符串"]) + "  " + str(i["推导所用产生式或匹配"]) + '\n'
+                pos = pos + 1
+        self.textEdit_5.setText(t1)
+
+    def MS(self):
+        print("多步显示")
+        # self.ll1.Input = self.lineEdit_2.text()][[']
+        self.ll1.FA()
+        print(self.ll1.process)
+        t2 = "步骤  分析栈  剩余字符串  推导所用产生式或匹配\n"
+        for i in self.ll1.process:
+            t2 += str(i["步骤"]) + "  " + str(i["分析栈"]) + "  " + str(i["剩余字符串"]) + "  " + str(i["推导所用产生式或匹配"]) + '\n'
+        self.textEdit_5.setText(t2)
 
 
 # 有重写
@@ -198,6 +296,13 @@ def fun():
     app = QApplication(sys.argv)
     per = PerGUI()
     per.show()
+    sys.exit(app.exec_())
+
+
+def fun1():
+    app = QApplication(sys.argv)
+    help = LL1GUI()
+    help.show()
     sys.exit(app.exec_())
 
 

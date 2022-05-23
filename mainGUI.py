@@ -8,6 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -145,4 +146,3 @@ class Ui_MainWindow(object):
         self.actionD.setText(_translate("MainWindow", "识别单词(D)"))
         self.actionDFA.setText(_translate("MainWindow", "有穷自动机(DFA)"))
         self.actionLL_1.setText(_translate("MainWindow", "LL(1)"))
-

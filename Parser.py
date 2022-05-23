@@ -11,8 +11,121 @@ from tkinter import filedialog
 # LL1的实现类
 class LL1:
     def __init__(self):
-        self.grammer = {}  # 用字典存储文法,键——开始符号  值——产生式（'$'——ε(发音：伊普西隆)）
-        self.temp = []  # 用于消除在求非终结符A的后随符号集时的递归
+        # 用字典存储文法,键——开始符号  值——产生式（'$'——ε(发音：伊普西隆)）
+        self.grammer = {}
+        # 用于消除在求非终结符A的后随符号集时的递归
+        self.temp = []
+        # 文法的所有终结符
+        self.terminal = []
+        # 文法的预测分析表
+        self.FAT = {}
+        # 预测分析栈
+        self.stack = []
+        # 存放当前栈顶符号的工作单元
+        self.X = None
+        # 存放当前输入符号的工作单元
+        self.a = None
+        # 输入串
+        self.Input = "i+i*i"
+        # 分析过程
+        self.process = []
+        self.p = 1
+
+    # 预测分析
+    def FA(self):
+        self.Input += '#'
+        self.stack = []
+        self.process = []
+        self.p = 1
+        pos = 0  # 记录读到哪一个字符了
+        # #和开始符号进栈
+        self.stack.append('#')
+        start = list(self.grammer.keys())[0]
+        self.stack.append(start)
+        self.a = self.Input[pos]
+        pos = pos + 1
+
+        while True:
+            dic = {}
+
+            self.X = self.stack.pop()
+
+            dic["步骤"] = self.p
+            self.p = self.p + 1
+            dic["分析栈"] = self.stack
+            s = ""
+            for i in range(pos - 1, len(self.grammer) + 1):
+                s += str(self.Input[i])
+            dic["剩余字符串"] = s
+
+            if self.X in self.terminal:
+                if self.X == self.a:
+                    dic["推导所用产生式或匹配"] = self.a + "匹配"
+                    self.process.append(dic)
+
+                    self.a = self.Input[pos]
+                    if pos < len(self.grammer):
+                        pos = pos + 1
+                    else:
+                        return
+                else:
+                    print("出错")
+                    return
+            else:
+                if self.X == '#':
+                    if self.X == self.a:
+                        dic["推导所用产生式或匹配"] = self.a + "匹配"
+                        self.process.append(dic)
+                        return
+                    else:
+                        print("出错")
+                        return
+                else:
+                    if type(self.FAT[self.X][self.a]) == str:
+                        l1 = self.FAT[self.X][self.a]
+                        dic["推导所用产生式或匹配"] = l1
+                        self.process.append(dic)
+                        l1 = l1.split('>')[1]
+                        l1 = l1.replace('[', '')
+                        l1 = l1.replace(']', '')
+                        l1 = l1.replace('\'', '')
+                        l1 = l1.replace(',', '')
+                        l1 = l1.replace(' ', '')
+                        l = list(l1)
+                        result = list(reversed(l))
+                        for i in result:
+                            if i != '$':
+                                self.stack.append(i)
+                    else:
+                        print("出错")
+                        return
+
+    # 求文法的预测分析表
+    def FATable(self):
+        for key in self.grammer.keys():
+            temp = {}
+            flag = 0
+            if type(self.grammer[key][0]) == list:
+                for p in self.grammer[key]:
+                    for c in self.PFirst(key, p):
+                        if c == '$':
+                            flag = 1
+                        else:
+                            temp[c] = key + "->" + str(p)
+                    if flag == 1:
+                        for co in self.Follow(key):
+                            temp[co] = key + "->" + str(p)
+                self.FAT[key] = temp
+            else:
+                for col in self.PFirst(key, self.grammer[key]):
+                    if col == '$':
+                        flag = 1
+                    else:
+                        temp[col] = key + "->" + str(self.grammer[key])
+                if flag == 1:
+                    for col in self.Follow(key):
+                        temp[col] = key + "->" + str(self.grammer[key])
+                self.FAT[key] = temp
 
     # 读取文法文件，初始化grammer
     def openfile(self):
@@ -42,6 +155,13 @@ class LL1:
                     self.grammer[key] = values
                 else:
                     self.grammer[key] = l1
+            # 产生文法的终结字符集
+            for line in data:
+                for i in range(3, len(line)):
+                    if line[i].isupper() == False and line[i] not in ['$', '\n', '|']:
+                        self.terminal.append(line[i])
+            self.terminal.append('#')
+            return data
 
     # 判断文法是否为LL(1)文法
     def judge(self):
@@ -180,6 +300,7 @@ class LL1:
                                 follow.extend(self.Follow(key))
             elif flag == 0:  # 该键值对没有非终结符A
                 continue
+        self.temp = []
         return list(set(follow))
 
 
@@ -1050,6 +1171,10 @@ def ll1():
     l = LL1()
     l.openfile()
     print(l.judge())
+    # l.FATable()
+    # l.FA()
+    # for i in l.process:
+    #     print(i)
 
 
 def fun():
@@ -1063,4 +1188,4 @@ def fun():
 
 
 if __name__ == '__main__':
-    fun()
+    ll1()

@@ -570,7 +570,7 @@ class MCG:
 
                     self.stat()  # 语句
 
-                    self.backpatch(p1, self.NXQ)
+                    self.backpatch(p1, self.NXQ + 1)
                 return exp
 
     # for 语句
@@ -732,6 +732,7 @@ class MCG:
                 self.pos = self.pos - 1
                 exp = self.expr()
                 self.gencode('ret', ' ', ' ', exp)
+                self.gencode('ret', ' ', ' ', ' ')
                 self.getnexttochen()  # 处理 ;
 
     # 复合语句
@@ -780,22 +781,32 @@ class MCG:
         if str in ['101', '102', '103', '107']:  # 函数类型
             Str = self.getnexttochen()
             if Str == '700':  # 标识符
+                funName = self.getnextword()
                 # self.pos = self.pos - 1
                 Str = self.getnextword()
                 self.gencode(Str, ' ', ' ', ' ')
                 if self.getnexttochen() == '201':  # 处理 (
                     if self.getnexttochen() in ['101', '102', '103']:  # 函数变量
                         self.pos = self.pos - 1
-                        self.fundp()  # 函数定义形参
+                        self.fundp(funName)  # 函数定义形参
                 if self.getnexttochen() == '202':  # 匹配 ）
                     self.compoundstat(Str)  # 复合语句
 
     # 函数定义形参
-    def fundp(self):
+    def fundp(self, funName):
+        self.scopePath = 0
+        vardic = {}
+        vardic['SP'] = self.scopePath
         if self.getnexttochen() in ['101', '102', '103']:  # 函数变量
+            t = self.getnextword()
+            vardic['type'] = t
             if self.getnexttochen() == '700':  # 标识符
+                name = self.getnextword()
+                vardic['name'] = name
+                vardic['fName'] = funName
+                self.varTable.append(vardic)
                 if self.getnexttochen() == '304':  # 匹配 ,
-                    self.fundp()  # 函数定义形参
+                    self.fundp(funName)  # 函数定义形参
                 else:
                     self.pos = self.pos - 1
 
