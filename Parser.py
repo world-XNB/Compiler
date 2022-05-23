@@ -26,7 +26,7 @@ class LL1:
         # 存放当前输入符号的工作单元
         self.a = None
         # 输入串
-        self.Input = "i+i*i"
+        self.Input = ""
         # 分析过程
         self.process = []
         self.p = 1

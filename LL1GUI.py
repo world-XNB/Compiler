@@ -11,9 +11,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_LL1(object):
     def setupUi(self, LL1):
         LL1.setObjectName("LL1")
-        LL1.resize(1000, 800)
+        LL1.resize(1226, 800)
         self.layoutWidget = QtWidgets.QWidget(LL1)
-        self.layoutWidget.setGeometry(QtCore.QRect(10, 10, 981, 781))
+        self.layoutWidget.setGeometry(QtCore.QRect(10, 10, 1201, 781))
         self.layoutWidget.setObjectName("layoutWidget")
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout_8.setContentsMargins(0, 0, 0, 0)
@@ -126,14 +126,14 @@ class Ui_LL1(object):
 
         self.retranslateUi(LL1)
         self.pushButton_9.clicked.connect(LL1.close)
-        self.pushButton.clicked.connect(LL1.open)
-        self.pushButton_3.clicked.connect(LL1.save)
-        self.pushButton_2.clicked.connect(LL1.confirm)
         self.pushButton_6.clicked.connect(LL1.FATable)
-        self.pushButton_4.clicked.connect(LL1.askFirst)
-        self.pushButton_5.clicked.connect(LL1.askFollow)
         self.pushButton_8.clicked.connect(LL1.OS)
         self.pushButton_7.clicked.connect(LL1.MS)
+        self.pushButton_3.clicked.connect(LL1.save)
+        self.pushButton_5.clicked.connect(LL1.askFollow)
+        self.pushButton.clicked.connect(LL1.open)
+        self.pushButton_2.clicked.connect(LL1.confirm)
+        self.pushButton_4.clicked.connect(LL1.askFirst)
         QtCore.QMetaObject.connectSlotsByName(LL1)
 
     def retranslateUi(self, LL1):

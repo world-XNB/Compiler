@@ -547,6 +547,7 @@ class MCG:
         str = self.getnexttochen()
         if str == '112':  # 处理 else
             self.backpatch(self.P, self.NXQ + 1)
+            self.P = []
 
             p1 = []
             self.gencode('j', ' ', ' ', self.NXQ + 1)
@@ -556,6 +557,7 @@ class MCG:
             self.backpatch(p1, self.NXQ)
 
         else:
+            self.P = []
             self.pos = self.pos - 1
 
     # 调用if语句

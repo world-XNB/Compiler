@@ -246,8 +246,12 @@ class LL1GUI(Ui_LL1, QMainWindow):
     def FATable(self):
         self.ll1.FATable()
         f = ""
+
         for fat in self.ll1.FAT.keys():
-            f += str(fat) + " " + str(self.ll1.FAT[fat]) + '\n'
+            f += "行：" + str(fat) + "\n"
+            for i in self.ll1.FAT[fat].keys():
+                f += "  列：" + str(i) + "  推导式：" + str(self.ll1.FAT[fat][i]) + '\n'
+            f += '\n'
         self.textEdit_4.setText(f)
 
     def askFirst(self):
@@ -264,7 +268,7 @@ class LL1GUI(Ui_LL1, QMainWindow):
 
     def OS(self):
         print("单步显示")
-        # self.ll1.Input = self.lineEdit_2.text()
+        self.ll1.Input = self.lineEdit_2.text()
         self.ll1.FA()
         print(self.ll1.process)
         pos = 1
@@ -282,7 +286,7 @@ class LL1GUI(Ui_LL1, QMainWindow):
 
     def MS(self):
         print("多步显示")
-        # self.ll1.Input = self.lineEdit_2.text()][[']
+        self.ll1.Input = self.lineEdit_2.text()
         self.ll1.FA()
         print(self.ll1.process)
         t2 = "步骤  分析栈  剩余字符串  推导所用产生式或匹配\n"
