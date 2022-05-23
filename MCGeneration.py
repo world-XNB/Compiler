@@ -37,6 +37,8 @@ class MCG:
 
         self.flagvar = 1  # 标志量，辅助多个声明变量的翻译
 
+        self.P = []  # 辅助if语句因为else的多种情况
+
     # 回填函数
     def backpatch(self, p, t):
         for i in p:
@@ -544,6 +546,8 @@ class MCG:
         exp = self.iffun()
         str = self.getnexttochen()
         if str == '112':  # 处理 else
+            self.backpatch(self.P, self.NXQ + 1)
+
             p1 = []
             self.gencode('j', ' ', ' ', self.NXQ + 1)
             self.merge(p1, self.ICT[self.NXQ - 1])
@@ -563,14 +567,13 @@ class MCG:
                 exp = self.expr()  # 表达式
                 Str = self.getnexttochen()
                 if Str == '202':  # 处理 ）
-                    # self.gencode('jnz', exp, ' ', self.NXQ + 1)
-                    p1 = []
+                    # p1 = []
                     self.gencode('jz', exp, ' ', "else")
-                    self.merge(p1, self.ICT[self.NXQ - 1])
+                    self.merge(self.P, self.ICT[self.NXQ - 1])
 
                     self.stat()  # 语句
 
-                    self.backpatch(p1, self.NXQ + 1)
+                    self.backpatch(self.P, self.NXQ)
                 return exp
 
     # for 语句
@@ -585,10 +588,10 @@ class MCG:
 
                     p1 = []  # 真出口回填链
                     p2 = []  # 假出口回填链就
-                    self.gencode('jnz', exp, ' ', "AGAIN")  # 需要回填
-                    self.merge(p1, self.ICT[self.NXQ - 1])
                     self.gencode('jz', exp, ' ', "NXQ")
                     self.merge(p2, self.ICT[self.NXQ - 1])
+                    self.gencode('jnz', exp, ' ', "AGAIN")  # 需要回填
+                    self.merge(p1, self.ICT[self.NXQ - 1])
 
                     if self.getnexttochen() == '303':
                         INC = self.NXQ  # 表达式的入口代码

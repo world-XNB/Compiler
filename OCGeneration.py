@@ -73,7 +73,7 @@ class OCG:
 
     # 汇编代码最后部分（read,write）
     def ASMend(self):
-        self.ASM.append('\n\n填加read,write\n\n')
+        self.ASM.append('\n\n复制添加read,write的位置\n\n')
         self.ASM.append('code ends')
         self.ASM.append('end start')
 
