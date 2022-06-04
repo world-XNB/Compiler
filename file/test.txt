@@ -1,13 +1,18 @@
-	// 单行注释
-	/*
-	多行注释
-	*/
-	const int x=1;
-	int fun(int,int);
-	main()
-	{
-	    int a=2;
-	    int b,c,d,e;
-	    b=2+3%1;
-	    e=2*1+4/1;
-	}
+
+main()
+
+{
+  int i,N,sum = 0;
+  N = read();
+i=read();
+  if(N==1)
+{
+
+     if(i == 1)
+	sum = N+i;
+    }
+
+  write(sum);
+
+}
+

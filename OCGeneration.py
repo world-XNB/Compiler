@@ -22,7 +22,7 @@ class OCG:
                     {'number': 12, 'op': 'call', 'arg1': 'write', 'arg2': ' ', 'result': 'T3'},
                     {'number': 13, 'op': 'sys', 'arg1': ' ', 'arg2': ' ', 'result': ' '},
                     {'number': 14, 'op': 'sum', 'arg1': ' ', 'arg2': ' ', 'result': ' '},
-                    {'number': 15, 'op': '+', 'arg1': 'sum_x', 'arg2': 'sum_y', 'result': 'T4'},
+                    {'number': 15, 'op': '<', 'arg1': 'sum_x', 'arg2': 'sum_y', 'result': 'T4'},
                     {'number': 16, 'op': '=', 'arg1': 'T4', 'arg2': ' ', 'result': 'result'},
                     {'number': 17, 'op': 'ret', 'arg1': ' ', 'arg2': ' ', 'result': 'result'},
                     {'number': 18, 'op': 'ret', 'arg1': ' ', 'arg2': ' ', 'result': ' '}]
